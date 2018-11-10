@@ -22,27 +22,27 @@ namespace ArtifactAPI.Models
         public List<DecodedCard> Cards { get; set; }
     }
 
-    public class DecodedHero
+    public class DecodedHero : CardId
     {
-        /// <summary>
-        /// ID of the card
-        /// </summary>
-        public int Id { get; set; }
         /// <summary>
         /// The turn the hero get's played on
         /// </summary>
         public int Turn { get; set; }
     }
 
-    public class DecodedCard
+    public class DecodedCard : CardId
+    {
+        /// <summary>
+        /// How many of the card exists in the deck
+        /// </summary>
+        public int Count { get; set; }
+    }
+
+    public class CardId
     {
         /// <summary>
         /// The ID of the card
         /// </summary>
         public int Id { get; set; }
-        /// <summary>
-        /// How many of the card exists in the deck
-        /// </summary>
-        public int Count { get; set; }
     }
 }

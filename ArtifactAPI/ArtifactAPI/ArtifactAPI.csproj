@@ -49,7 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArtifactClient.cs" />
-    <Compile Include="DeckDecoder.cs" />
+    <Compile Include="Encoding\DeckDecoder.cs" />
+    <Compile Include="Encoding\DeckEncoder.cs" />
+    <Compile Include="Encoding\Helper.cs" />
     <Compile Include="Enums\Colors.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Enums\CardType.cs" />

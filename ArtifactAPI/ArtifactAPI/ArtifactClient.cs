@@ -1,4 +1,5 @@
-﻿using ArtifactAPI.Models;
+﻿using ArtifactAPI.Encoding;
+using ArtifactAPI.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -61,6 +62,11 @@ namespace ArtifactAPI
             }
 
             return cards;
+        }
+
+        public string EncodeDeck(DecodedDeck deck)
+        {
+            return DeckEncoder.Encode(deck);
         }
 
         /// <summary>

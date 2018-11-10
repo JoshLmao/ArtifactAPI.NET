@@ -24,7 +24,19 @@ namespace ArtifactAPI.Tests
             Assert.IsNotNull(deck);
             Assert.IsNotNull(deck.Heroes);
             Assert.IsNotNull(deck.Cards);
-            Assert.Equals(string.IsNullOrEmpty(deck.Name), false);
+            Assert.IsFalse(string.IsNullOrEmpty(deck.Name));
+        }
+
+        [TestMethod]
+        public void EncodeDeck()
+        {
+            ArtifactClient client = new ArtifactClient();
+
+            string startDeckCode = "ADCJWkTZX05uwGDCRV4XQGy3QGLmqUBg4GQJgGLGgO7AaABR3JlZW4vQmxhY2sgRXhhbXBsZQ__";
+            DecodedDeck deck = client.DecodeDeck(startDeckCode);
+            string encodedDeckCode = client.EncodeDeck(deck);
+
+            Assert.AreEqual(startDeckCode, encodedDeckCode);
         }
     }
 }

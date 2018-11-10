@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArtifactAPI
+namespace ArtifactAPI.Encoding
 {
     /// <summary>
     /// C# version of Valve's DeckDecoder script wrote in PHP (https://github.com/ValveSoftware/ArtifactDeckCode/blob/master/PHP/deck_decoder.php)
@@ -42,7 +42,7 @@ namespace ArtifactAPI
             noPrefix = noPrefix.Replace('_', '=');
             byte[] data = Convert.FromBase64String(noPrefix);
 
-            string decodedString = Encoding.UTF8.GetString(data);
+            string decodedString = System.Text.Encoding.UTF8.GetString(data);
 
             return data;
         }
@@ -126,8 +126,8 @@ namespace ArtifactAPI
                 name = System.Text.Encoding.UTF8.GetString(bytes);
 
                 // replace strip_tags with an HTML sanitizer or escaper as needed.
-                System.Text.RegularExpressions.Regex regHtml = new System.Text.RegularExpressions.Regex("<[^>]*>");
-                string s = regHtml.Replace(name, "");
+                name = Helper.StripTags(name);
+                
             }
 
             return new DecodedDeck()
