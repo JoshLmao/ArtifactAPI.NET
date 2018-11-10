@@ -13,7 +13,7 @@ namespace ArtifactAPI
     public class ArtifactClient
     {
         const string BASE_URL = "https://playartifact.com/";
-        const string OTHER_URL = "https://steamcdn-a.akamaihd.net/";
+        const string CDN_ROOT_URL = "https://steamcdn-a.akamaihd.net/";
 
         private RestClient m_client = null;
         private RestClient m_oClient = null;
@@ -21,28 +21,39 @@ namespace ArtifactAPI
         public ArtifactClient()
         {
             m_client = new RestClient(BASE_URL);
-            m_oClient = new RestClient(OTHER_URL);
+            m_oClient = new RestClient(CDN_ROOT_URL);
         }
 
+        private string Request(RestClient client, string requestUrl)
+        {
+            RestRequest request = new RestRequest(requestUrl);
+            IRestResponse response = client.Execute(request);
+            return response.Content;
+        }
+
+        /// <summary>
+        /// Returns all cards of the set. Currently, the only sets available are "00" and "01"
+        /// </summary>
+        /// <param name="cardSetId"></param>
+        /// <returns></returns>
         public CardSet GetCardSet(string cardSetId)
         {
-            //00 or 01
-            RestRequest request = new RestRequest($"/cardset/{cardSetId}");
+            string stageOneContent = Request(m_client, $"/cardset/{cardSetId}");
+            UrlStage stage = null;
+            try
+            {
+                stage = JsonConvert.DeserializeObject<UrlStage>(stageOneContent);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
-            IRestResponse response = m_client.Execute(request);
-            string content = response.Content;
-            JObject obj = JObject.Parse(content);
-
-            string newUrl = $"{obj["cdn_root"]}{obj["url"]}";
-
-            RestRequest req = new RestRequest(obj["url"].ToString());
-            IRestResponse resp = m_oClient.Execute(req);
-            string respContent = resp.Content;
-
+            string stageTwoContent = Request(m_oClient, stage.URL);
             CardSet cards = null;
             try
             {
-                cards = JsonConvert.DeserializeObject<CardSet>(respContent);
+                cards = JsonConvert.DeserializeObject<CardSet>(stageTwoContent);
             }
             catch(Exception e)
             {
@@ -50,6 +61,19 @@ namespace ArtifactAPI
             }
 
             return cards;
+        }
+
+        /// <summary>
+        /// Decodes a deck from it's encoded string. Can deplay deck at https://playartifact.com/d/{url}
+        /// </summary>
+        /// <param name="encodedDeckString">The base64 encoded string of the deck</param>
+        /// <returns></returns>
+        public DecodedDeck DecodeDeck(string encodedDeckString)
+        {
+            if (string.IsNullOrEmpty(encodedDeckString))
+                return null;
+
+            return DeckDecoder.Decode(encodedDeckString);
         }
     }
 }

@@ -8,5 +8,6 @@ namespace ArtifactAPI.Models
 {
     public class Deck
     {
+
     }
 }
