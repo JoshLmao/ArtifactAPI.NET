@@ -1,4 +1,5 @@
 ﻿using System;
+using ArtifactAPI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ArtifactAPI.Tests
@@ -10,8 +11,8 @@ namespace ArtifactAPI.Tests
         public void GetCards()
         {
             ArtifactClient client = new ArtifactClient();
-            var cards = client.GetCards("00");
-            Assert.AreEqual(cards, null);
+            CardSet cards = client.GetCardSet("01");
+            Assert.IsNotNull(cards);
         }
     }
 }

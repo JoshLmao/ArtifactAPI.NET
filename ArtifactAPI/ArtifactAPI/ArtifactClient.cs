@@ -24,7 +24,7 @@ namespace ArtifactAPI
             m_oClient = new RestClient(OTHER_URL);
         }
 
-        public CardSet GetCards(string cardSetId)
+        public CardSet GetCardSet(string cardSetId)
         {
             //00 or 01
             RestRequest request = new RestRequest($"/cardset/{cardSetId}");

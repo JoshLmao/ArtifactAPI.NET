@@ -49,9 +49,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArtifactClient.cs" />
+    <Compile Include="Enums\Colors.cs" />
     <Compile Include="Models\Card.cs" />
+    <Compile Include="Enums\CardType.cs" />
     <Compile Include="Models\Deck.cs" />
     <Compile Include="Models\CardSets.cs" />
+    <Compile Include="Models\Image.cs" />
+    <Compile Include="Enums\Rarity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
