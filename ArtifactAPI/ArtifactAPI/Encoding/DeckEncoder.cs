@@ -33,20 +33,19 @@ namespace ArtifactAPI.Encoding
                 return null;
 
             //Combine hero and normal cards and sort by id
-            List<CardId> allCards = deck.Heroes.Select(x => (CardId)x).ToList();
-            allCards.AddRange(deck.Cards.Select(x => (CardId)x));
-            allCards = SortCardsById(allCards);
-
-            int countHeroes = deck.Heroes.Count;
-            byte[] bytes = new byte[256];
+            List<CardId> heroesSorted = deck.Heroes.Select(x => (CardId)x).OrderBy(x => x, new SortByComparer()).ToList();
+            List<CardId> cardsSorted = deck.Cards.Select(x => (CardId)x).OrderBy(x => x, new SortByComparer()).ToList();
             
+            int countHeroes = deck.Heroes.Count;
+            List<CardId> allCards = heroesSorted.Concat(cardsSorted).ToList();
+
+            byte[] bytes = new byte[0];
             //our version and hero count
             int intVersion = CurrentVersion << 4 | ExtractNBitsWithCarry(countHeroes, 3);
             byte version = (byte)intVersion;
-
             if (!AddByte(ref bytes, version))
                 return null;
-            
+
             //the checksum which will be updated at the end
             byte nDummyChecksum = 0;
             var nChecksumByte = bytes.Length;
@@ -66,7 +65,7 @@ namespace ArtifactAPI.Encoding
                 while (trimLen > 63)
                 {
                     int amountToTrim = (int)Math.Floor((trimLen - 63.0) / 4.0);
-                    amountToTrim = (amountToTrim > 1) ? amountToTrim: 1;
+                    amountToTrim = (amountToTrim > 1) ? amountToTrim : 1;
                     name = name.Substring(0, name.Length - amountToTrim);
                     trimLen = name.Length;
                 }
@@ -83,12 +82,12 @@ namespace ArtifactAPI.Encoding
             int unChecksum = 0;
             int prevCardId = 0;
 
-            for (int unCurrHero = 0; unCurrHero < countHeroes; unCurrHero++ )
+            for (int unCurrHero = 0; unCurrHero < countHeroes; unCurrHero++)
             {
                 CardId card = allCards[unCurrHero];
                 DecodedHero casted = (DecodedHero)card;
 
-                if (casted.Turn == 0 )
+                if (casted.Turn == 0)
                     return null;
 
                 if (!AddCardToBuffer(casted.Turn, card.Id - prevCardId, bytes, unChecksum))
@@ -105,12 +104,17 @@ namespace ArtifactAPI.Encoding
             {
                 //see how many cards we can group together
                 CardId card = allCards[nCurrCard];
-                DecodedCard castedCard = (DecodedCard)card;
+                DecodedCard castedCard = null;
+                if (card is DecodedCard)
+                    castedCard = (DecodedCard)card;
 
-                if (castedCard.Count == 0 )
+                if (castedCard == null)
+                    continue;
+
+                if (castedCard.Count == 0)
                     return null;
 
-                if (castedCard.Id <= 0 )
+                if (castedCard.Id <= 0)
                     return null;
 
                 //record this set of cards, and advance
@@ -124,7 +128,7 @@ namespace ArtifactAPI.Encoding
             int preStringByteCount = bytes.Length;
 
             //write the string
-            if(!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name))
             {
                 byte[] nameBytes = System.Text.Encoding.UTF8.GetBytes(name);
                 foreach (byte nameByte in nameBytes)
@@ -135,7 +139,7 @@ namespace ArtifactAPI.Encoding
             }
 
             int unFullChecksum = ComputeChecksum(ref bytes, preStringByteCount - HeaderSize);
-            int unSmallChecksum = (unFullChecksum & 0x0FF );
+            int unSmallChecksum = (unFullChecksum & 0x0FF);
             bytes[nChecksumByte] = (byte)unSmallChecksum;
             return bytes;
         }
@@ -143,9 +147,9 @@ namespace ArtifactAPI.Encoding
         private static int ComputeChecksum(ref byte[] bytes, int unNumBytes)
         {
             int unChecksum = 0;
-            for (int unAddCheck = HeaderSize; unAddCheck < unNumBytes + HeaderSize; unAddCheck++ )
+            for (int unAddCheck = HeaderSize; unAddCheck < unNumBytes + HeaderSize; unAddCheck++)
             {
-                var b= bytes[unAddCheck];
+                var b = bytes[unAddCheck];
                 unChecksum += b;
             }
             return unChecksum;
@@ -158,15 +162,15 @@ namespace ArtifactAPI.Encoding
                 return false;
 
             int countBytesStart = bytes.Length;
-            
+
             //determine our count. We can only store 2 bits, and we know the value is at least one, so we can encode values 1-5. However, we set both bits to indicate an 
             //extended count encoding
             byte knFirstByteMaxCount = 0x03;
-            bool bExtendedCount = ( unCount - 1 ) >= knFirstByteMaxCount;
+            bool bExtendedCount = (unCount - 1) >= knFirstByteMaxCount;
             //determine our first byte, which contains our count, a continue flag, and the first few bits of our value
-            int unFirstByteCount = bExtendedCount ? knFirstByteMaxCount: /*( uint8 )*/( unCount - 1 );
+            int unFirstByteCount = bExtendedCount ? knFirstByteMaxCount : /*( uint8 )*/(unCount - 1);
             int unFirstByte = (unFirstByteCount << 6);
-            unFirstByte |= ExtractNBitsWithCarry( unValue, 5);
+            unFirstByte |= ExtractNBitsWithCarry(unValue, 5);
 
             if (!AddByte(ref bytes, (byte)unFirstByte))
                 return false;
@@ -183,7 +187,7 @@ namespace ArtifactAPI.Encoding
             }
 
             int countBytesEnd = bytes.Length;
-            if (countBytesEnd - countBytesStart > 11 )
+            if (countBytesEnd - countBytesStart > 11)
             {
                 //something went horribly wrong
                 return false;
@@ -194,7 +198,7 @@ namespace ArtifactAPI.Encoding
         private static byte ExtractNBitsWithCarry(int value, int numBits)
         {
             int unLimitBit = 1 << numBits;
-            int unResult = (value & ( unLimitBit - 1 ) );
+            int unResult = (value & (unLimitBit - 1));
             if (value >= unLimitBit)
             {
                 unResult |= unLimitBit;
@@ -223,35 +227,44 @@ namespace ArtifactAPI.Encoding
                 unValue >>= 7;
 
                 if (!AddByte(ref bytes, unNextByte))
-                        return false;
+                    return false;
 
                 unNumBytes++;
             }
             return true;
         }
 
-        private static string EncodeBytesToString(byte[] bytes)
+        public static string EncodeBytesToString(byte[] bytes)
         {
             int byteCount = bytes.Length;
 
             //if we have an empty buffer, just return
-            if (byteCount == 0 )
+            if (byteCount == 0)
                 return null;
 
             //byte[] packed = pack("C*", bytes);
             string encoded = System.Text.Encoding.UTF8.GetString(bytes);
             string deck_string = EncodePrefix + encoded;
 
-            deck_string = deck_string.Replace('-', '/');
-            deck_string = deck_string.Replace('_', '=');
-            string fixedString = deck_string;
+            //deck_string = deck_string.Replace('-', '/');
+            //deck_string = deck_string.Replace('_', '=');
+            //string fixedString = deck_string;
 
-            return fixedString;
+            return deck_string;
         }
+    }
 
-        private static List<CardId> SortCardsById(List<CardId> cards)
+    public class SortByComparer : IComparer<CardId>
+    {
+        public int Compare(CardId x, CardId y)
         {
-            return null;
+            if (x.Id < y.Id)
+                return -1;
+            else if (x.Id > y.Id)
+                return 1;
+            else
+                return 0;
+            return x.Id <= y.Id ? -1 : 1;
         }
     }
 }
