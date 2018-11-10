@@ -10,7 +10,7 @@ For further information, check out [some of Valve's information](https://github.
 
 ## License & Contributions
 
-This repo is available under the MIT license. I welcome and and all contributions too ;)
+This repo is available under the MIT license. I welcome any and all contributions too ;)
 
 ## Donations
 

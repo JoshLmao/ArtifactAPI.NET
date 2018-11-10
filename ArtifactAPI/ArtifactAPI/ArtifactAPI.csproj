@@ -55,6 +55,7 @@
     <Compile Include="Enums\CardType.cs" />
     <Compile Include="Models\Deck.cs" />
     <Compile Include="Models\CardSets.cs" />
+    <Compile Include="Models\DecodedDeck.cs" />
     <Compile Include="Models\Image.cs" />
     <Compile Include="Enums\Rarity.cs" />
     <Compile Include="Models\UrlStage.cs" />
