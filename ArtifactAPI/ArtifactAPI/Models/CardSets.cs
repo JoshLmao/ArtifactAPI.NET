@@ -22,7 +22,7 @@ namespace ArtifactAPI.Models
         public Set Info { get; set; }
 
         [JsonProperty("card_list")]
-        List<Card> Cards { get; set; }
+        public List<Card> Cards { get; set; }
     }
 
     public class Set

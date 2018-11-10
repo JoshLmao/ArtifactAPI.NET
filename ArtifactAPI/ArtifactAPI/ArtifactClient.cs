@@ -81,5 +81,11 @@ namespace ArtifactAPI
 
             return DeckDecoder.Decode(encodedDeckString);
         }
+
+        public Card GetCard(int id)
+        {
+            CardSet cardSet = GetCardSet("01");
+            return cardSet.Set.Cards.First(x => x.Id == id);
+        }
     }
 }

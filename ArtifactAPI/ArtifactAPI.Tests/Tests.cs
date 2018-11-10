@@ -38,5 +38,12 @@ namespace ArtifactAPI.Tests
 
             Assert.AreEqual(startDeckCode, encodedDeckCode);
         }
+
+        [TestMethod]
+        public void FindCardById()
+        {
+            //Tests the GetCard(int id) method
+            throw new NotImplementedException("ToDo");
+        }
     }
 }

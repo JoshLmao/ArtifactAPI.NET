@@ -11,7 +11,6 @@ namespace ArtifactAPI.Encoding
     {
         public static int CurrentVersion = 2;
         private static string EncodePrefix = "ADC";
-        private static int MaxBytesForVarUint32 = 5;
         private static int HeaderSize = 3;
 
         public static string Encode(DecodedDeck deck)
@@ -76,22 +75,28 @@ namespace ArtifactAPI.Encoding
             if (!AddByte(ref bytes, (byte)nameLen))
                 return null;
 
-            if (!AddRemainingNumberToBuffer(ref countHeroes, 3, bytes))
+            int keepCount = countHeroes;
+            if (!AddRemainingNumberToBuffer(ref countHeroes, 3, ref bytes))
                 return null;
 
             int unChecksum = 0;
             int prevCardId = 0;
 
-            for (int unCurrHero = 0; unCurrHero < countHeroes; unCurrHero++)
+            for (int unCurrHero = 0; unCurrHero < keepCount; unCurrHero++)
             {
                 CardId card = allCards[unCurrHero];
-                DecodedHero casted = (DecodedHero)card;
+                DecodedHero casted = null;
+                if (card is DecodedHero)
+                    casted = (DecodedHero)card;
+
+                if (casted == null)
+                    continue;
 
                 if (casted.Turn == 0)
-                    return null;
+                    continue;
 
-                if (!AddCardToBuffer(casted.Turn, card.Id - prevCardId, bytes, unChecksum))
-                    return null;
+                if (!AddCardToBuffer(casted.Turn, card.Id - prevCardId, ref bytes, unChecksum))
+                    continue;
 
                 prevCardId = casted.Id;
             }
@@ -112,14 +117,14 @@ namespace ArtifactAPI.Encoding
                     continue;
 
                 if (castedCard.Count == 0)
-                    return null;
+                    continue;
 
                 if (castedCard.Id <= 0)
-                    return null;
+                    continue;
 
                 //record this set of cards, and advance
-                if (!AddCardToBuffer(castedCard.Count, castedCard.Id - prevCardId, bytes, unChecksum))
-                    return null;
+                if (!AddCardToBuffer(castedCard.Count, castedCard.Id - prevCardId, ref bytes, unChecksum))
+                    continue;
 
                 prevCardId = castedCard.Id;
             }
@@ -155,7 +160,7 @@ namespace ArtifactAPI.Encoding
             return unChecksum;
         }
 
-        private static bool AddCardToBuffer(int unCount, int unValue, byte[] bytes, int unCheckSum)
+        private static bool AddCardToBuffer(int unCount, int unValue, ref byte[] bytes, int unCheckSum)
         {
             //this shouldn't ever be the case
             if (unCount == 0)
@@ -176,13 +181,13 @@ namespace ArtifactAPI.Encoding
                 return false;
 
             //now continue writing out the rest of the number with a carry flag
-            if (!AddRemainingNumberToBuffer(ref unValue, 5, bytes))
+            if (!AddRemainingNumberToBuffer(ref unValue, 5, ref bytes))
                 return false;
 
             //now if we overflowed on the count, encode the remaining count
             if (bExtendedCount)
             {
-                if (!AddRemainingNumberToBuffer(ref unCount, 0, bytes))
+                if (!AddRemainingNumberToBuffer(ref unCount, 0, ref bytes))
                     return false;
             }
 
@@ -217,7 +222,7 @@ namespace ArtifactAPI.Encoding
             return true;
         }
 
-        private static bool AddRemainingNumberToBuffer(ref int unValue, int unAlreadyWrittenBits, byte[] bytes)
+        private static bool AddRemainingNumberToBuffer(ref int unValue, int unAlreadyWrittenBits, ref byte[] bytes)
         {
             unValue = unValue >> unAlreadyWrittenBits;
             int unNumBytes = 0;
