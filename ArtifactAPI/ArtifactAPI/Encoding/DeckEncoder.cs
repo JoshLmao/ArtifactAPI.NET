@@ -9,9 +9,9 @@ namespace ArtifactAPI.Encoding
 {
     public class DeckEncoder
     {
-        public static int CurrentVersion = 2;
-        private static string EncodePrefix = "ADC";
-        private static int HeaderSize = 3;
+        public static readonly int CurrentVersion = 2;
+        private static readonly string EncodePrefix = "ADC";
+        private static readonly int HeaderSize = 3;
 
         public static string Encode(DecodedDeck deck)
         {

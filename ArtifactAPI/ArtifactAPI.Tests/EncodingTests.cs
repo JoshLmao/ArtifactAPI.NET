@@ -1,4 +1,5 @@
 ﻿using ArtifactAPI.Encoding;
+using ArtifactAPI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,30 @@ namespace ArtifactAPI.Tests
             string output = DeckEncoder.EncodeBytesToString(bytes);
             Assert.AreEqual(output, "ADCJWkTZX05uwGDCRV4XQGy3QGLmqUBg4GQJgGLGgO7AaABR3JlZW4vQmxhY2sgRXhhbXBsZQ__");
         }
+
+        [TestMethod]
+        public void DecodeDeck()
+        {
+            ArtifactClient client = new ArtifactClient();
+            DecodedDeck deck = client.DecodeDeck("ADCJQUQI30zuwEYg2ABeF1Bu94BmWIBTEkLtAKlAZakAYmHh0JsdWUvUmVkIEV4YW1wbGU_");
+
+            Assert.IsNotNull(deck);
+            Assert.IsNotNull(deck.Heroes);
+            Assert.IsNotNull(deck.Cards);
+            Assert.IsFalse(string.IsNullOrEmpty(deck.Name));
+        }
+
+        [TestMethod]
+        public void EncodeDeck()
+        {
+            ArtifactClient client = new ArtifactClient();
+
+            string startDeckCode = "ADCJWkTZX05uwGDCRV4XQGy3QGLmqUBg4GQJgGLGgO7AaABR3JlZW4vQmxhY2sgRXhhbXBsZQ__";
+            DecodedDeck deck = client.DecodeDeck(startDeckCode);
+            string encodedDeckCode = client.EncodeDeck(deck);
+
+            Assert.AreEqual(startDeckCode, encodedDeckCode);
+        }
+
     }
 }
