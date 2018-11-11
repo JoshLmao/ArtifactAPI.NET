@@ -105,7 +105,7 @@ namespace ArtifactAPI.Encoding
 
             List<DecodedCard> cards = new List<DecodedCard>();
             nPrevCardBase = 0;
-            while ( nCurrentByteIndex <= nTotalCardBytes )
+            while (nCurrentByteIndex < nTotalCardBytes)
             {
                 int nCardCount = 0;
                 int nCardID = 0;
