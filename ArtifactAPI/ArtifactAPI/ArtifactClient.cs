@@ -19,6 +19,8 @@ namespace ArtifactAPI
         private RestClient m_client = null;
         private RestClient m_oClient = null;
 
+        List<Card> m_loadedHeroes = null;
+
         public ArtifactClient()
         {
             m_client = new RestClient(BASE_URL);
@@ -54,12 +56,14 @@ namespace ArtifactAPI
             CardSet cards = null;
             try
             {
-                cards = JsonConvert.DeserializeObject<CardSet>(stageTwoContent);
+                cards = JsonConvert.DeserializeObject<CardSet>(stageTwoContent, new CardToSpecificJsonConverter());
             }
             catch(Exception e)
             {
                 Console.WriteLine($"Failed to deserialize - {e}");
             }
+
+            m_loadedHeroes = cards.Set.Cards;
 
             return cards;
         }
@@ -92,8 +96,51 @@ namespace ArtifactAPI
 
         public Card GetCard(int id)
         {
-            CardSet cardSet = GetCardSet("01");
-            return cardSet.Set.Cards.First(x => x.Id == id);
+            if(m_loadedHeroes == null)
+                m_loadedHeroes = GetCardSet("01").Set.Cards;
+
+            return m_loadedHeroes.FirstOrDefault(x => x.Id == id);
+        }
+
+        public Deck GetCardsFromDecodedDeck(DecodedDeck decodedDeck)
+        {
+            if (decodedDeck == null)
+                return null;
+
+            List<HeroCard> heroCards = new List<HeroCard>();
+            foreach(DecodedHero dHero in decodedDeck.Heroes)
+            {
+                Card card = GetCard(dHero.Id);
+                if (card == null || !(card is HeroCard))
+                    continue;
+
+                HeroCard heroCard = (HeroCard)card;
+                heroCard.Turn = dHero.Turn;
+
+                heroCards.Add(heroCard);
+            }
+
+            List<GenericCard> genericCards = new List<GenericCard>();
+            foreach(DecodedCard dCard in decodedDeck.Cards)
+            {
+                Card card = GetCard(dCard.Id);
+                if (card == null || !(card is GenericCard))
+                    continue;
+
+                GenericCard genericCard = card as GenericCard;
+                genericCard.Amount = dCard.Count;
+
+                genericCards.Add(genericCard);
+            }
+
+            Deck d = new Deck()
+            {
+                Name = decodedDeck.Name,
+                Heroes = heroCards,
+                Cards = genericCards,
+            };
+
+            return d;
         }
     }
 }

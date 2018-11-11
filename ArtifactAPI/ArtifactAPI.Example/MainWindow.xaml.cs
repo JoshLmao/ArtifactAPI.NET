@@ -48,6 +48,35 @@ namespace ArtifactAPI.Example
                 Console.WriteLine("Unable to get deck. DeckCode is invald");
                 return;
             }
+
+            Deck deck = m_client.GetCardsFromDecodedDeck(decodedDeck);
+
+            List<System.Windows.Controls.Image> heroImageHolders = new List<System.Windows.Controls.Image>()
+            {
+                img_HeroOne, img_HeroTwo, img_HeroThree, img_HeroFour, img_HeroFive
+            };
+            for (int i = 0; i < deck.Heroes.Count; i++)
+            {
+                int additional = 0;
+                int turn = deck.Heroes[i].Turn;
+                if (turn > 1)
+                    turn += 2; //Add 2 because of heroImageHolders elements 0-2
+
+                //If the hero turn is 1, but already added a hero, then increase additional counter
+                while (heroImageHolders[turn - 1 + additional].Source != null)
+                    additional++;
+
+                heroImageHolders[turn - 1 + additional].Source = GetImageFromUrl(deck.Heroes[i].IngameImage.Default);
+            }
+        }
+
+        private BitmapImage GetImageFromUrl(string url)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(url, UriKind.Absolute);
+            bitmap.EndInit();
+            return bitmap;
         }
 
         private void OnOpenOnWebsite(object sender, MouseButtonEventArgs e)

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace ArtifactAPI.Models
 {
-    public class Deck
+    public class HeroCard : Card
     {
-        public string Name { get; set; }
-        public List<HeroCard> Heroes { get; set; }
-        public List<GenericCard> Cards {get;set;}
+        public int Turn { get; set; }
     }
 }
