@@ -32,7 +32,8 @@ namespace ArtifactAPI.Tests
         {
             ArtifactClient client = new ArtifactClient();
 
-            string startDeckCode = "ADCJWkTZX05uwGDCRV4XQGy3QGLmqUBg4GQJgGLGgO7AaABR3JlZW4vQmxhY2sgRXhhbXBsZQ__";
+            //string startDeckCode = "ADCJWkTZX05uwGDCRV4XQGy3QGLmqUBg4GQJgGLGgO7AaABR3JlZW4vQmxhY2sgRXhhbXBsZQ__";
+            string startDeckCode = "ADCJQUQI30zuwEYg2ABeF1Bu94BmWIBTEkLtAKlAZakAYmHh0JsdWUvUmVkIEV4YW1wbGU_";
             DecodedDeck deck = client.DecodeDeck(startDeckCode);
             string encodedDeckCode = client.EncodeDeck(deck);
 

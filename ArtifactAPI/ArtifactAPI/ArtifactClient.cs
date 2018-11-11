@@ -64,13 +64,21 @@ namespace ArtifactAPI
             return cards;
         }
 
+        /// <summary>
+        /// Encodes a built deck into a string for sharing
+        /// </summary>
+        /// <param name="deck">The full deck</param>
+        /// <returns>Base8</returns>
         public string EncodeDeck(DecodedDeck deck)
         {
+            if (deck == null)
+                return null;
+
             return DeckEncoder.Encode(deck);
         }
 
         /// <summary>
-        /// Decodes a deck from it's encoded string. Can deplay deck at https://playartifact.com/d/{url}
+        /// Decodes a deck from it's encoded string. Can display deck at https://playartifact.com/d/{url}
         /// </summary>
         /// <param name="encodedDeckString">The base64 encoded string of the deck</param>
         /// <returns></returns>

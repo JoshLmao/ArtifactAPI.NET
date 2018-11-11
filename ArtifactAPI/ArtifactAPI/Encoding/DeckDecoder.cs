@@ -49,11 +49,11 @@ namespace ArtifactAPI.Encoding
 
         private static DecodedDeck ParseDeck(string deckCode, byte[] deckBytes)
         {
-            var nCurrentByteIndex = 0;
-            var nTotalBytes = deckBytes.Length;
+            int nCurrentByteIndex = 0;
+            int nTotalBytes = deckBytes.Length;
 
-            var nVersionAndHeroes = deckBytes[nCurrentByteIndex++];
-            var version = nVersionAndHeroes >> 4;
+            byte nVersionAndHeroes = deckBytes[nCurrentByteIndex++];
+            int version = nVersionAndHeroes >> 4;
 
             if (CURRENT_VERSION != version && version != 1)
                 return null;
@@ -79,17 +79,17 @@ namespace ArtifactAPI.Encoding
 
             //read in our hero count (part of the bits are in the version, but we can overflow bits here
             var nNumHeroes = 0;
-            if (!ReadVarEncodedUint32((int)nVersionAndHeroes, 3, deckBytes, nCurrentByteIndex, nTotalCardBytes, ref nNumHeroes))
+            if (!ReadVarEncodedUint32((int)nVersionAndHeroes, 3, deckBytes, ref nCurrentByteIndex, nTotalCardBytes, ref nNumHeroes))
                 return null;
 
             //now read in the heroes
-            var nPrevCardBase = 0;
+            int nPrevCardBase = 0;
             List<DecodedHero> heroes = new List<DecodedHero>();
             for (int nCurrHero = 0; nCurrHero < nNumHeroes; nCurrHero++)
             {
-                var nHeroTurn = 0;
-                var nHeroCardID = 0;
-                if (!ReadSerializedCard( deckBytes, ref nCurrentByteIndex, nTotalCardBytes, nPrevCardBase, ref nHeroTurn, ref nHeroCardID))
+                int nHeroTurn = 0;
+                int nHeroCardID = 0;
+                if (!ReadSerializedCard(deckBytes, ref nCurrentByteIndex, nTotalCardBytes, ref nPrevCardBase, ref nHeroTurn, ref nHeroCardID))
                 {
                     return null;
                 }
@@ -109,7 +109,7 @@ namespace ArtifactAPI.Encoding
             {
                 int nCardCount = 0;
                 int nCardID = 0;
-                if (!ReadSerializedCard( deckBytes, ref nCurrentByteIndex, nTotalBytes, nPrevCardBase, ref nCardCount, ref nCardID))
+                if (!ReadSerializedCard( deckBytes, ref nCurrentByteIndex, nTotalBytes, ref nPrevCardBase, ref nCardCount, ref nCardID))
                     return null;
 
                 cards.Add(new DecodedCard()
@@ -138,7 +138,7 @@ namespace ArtifactAPI.Encoding
             };
         }
 
-        private static bool ReadSerializedCard(byte[] data, ref int indexStart, int indexEnd, int nPrevCardBase, ref int nOutCount, ref int nOutCardID)
+        private static bool ReadSerializedCard(byte[] data, ref int indexStart, int indexEnd, ref int nPrevCardBase, ref int nOutCount, ref int nOutCardID)
         {
             //end of the memory block?
             if (indexStart > indexEnd)
@@ -151,14 +151,14 @@ namespace ArtifactAPI.Encoding
             //read in the delta, which has 5 bits in the header, then additional bytes while the value is set
             var nCardDelta = 0;
 
-            if (!ReadVarEncodedUint32( nHeader, 5, data, indexStart, indexEnd, ref nCardDelta))
+            if (!ReadVarEncodedUint32( nHeader, 5, data, ref indexStart, indexEnd, ref nCardDelta))
                 return false;
             
-             nOutCardID = nPrevCardBase + nCardDelta;
+            nOutCardID = nPrevCardBase + nCardDelta;
             //now parse the count if we have an extended count
             if (bHasExtendedCount)
             {
-                if (!ReadVarEncodedUint32(0, 0, data, indexStart, indexEnd, ref nOutCount))
+                if (!ReadVarEncodedUint32(0, 0, data, ref indexStart, indexEnd, ref nOutCount))
                     return false;
             }
             else
@@ -171,7 +171,7 @@ namespace ArtifactAPI.Encoding
             return true;
         }
 
-        private static bool ReadVarEncodedUint32(int nBaseValue, int nBaseBits, byte[] data, int indexStart, int indexEnd, ref int outValue)
+        private static bool ReadVarEncodedUint32(int nBaseValue, int nBaseBits, byte[] data, ref int indexStart, int indexEnd, ref int outValue)
         {
             outValue = 0;
 

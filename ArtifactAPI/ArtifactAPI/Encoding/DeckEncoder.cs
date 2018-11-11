@@ -18,7 +18,7 @@ namespace ArtifactAPI.Encoding
             if (deck == null)
                 return null;
 
-            byte[] bytes = EncodeBytes(deck);
+            byte[] bytes = EncodeToBytes(deck);
             if (bytes == null)
                 return null;
 
@@ -26,7 +26,7 @@ namespace ArtifactAPI.Encoding
             return deckCode;
         }
 
-        private static byte[] EncodeBytes(DecodedDeck deck)
+        private static byte[] EncodeToBytes(DecodedDeck deck)
         {
             if (deck == null || deck.Heroes == null || deck.Cards == null)
                 return null;
@@ -47,7 +47,7 @@ namespace ArtifactAPI.Encoding
 
             //the checksum which will be updated at the end
             byte nDummyChecksum = 0;
-            var nChecksumByte = bytes.Length;
+            int nChecksumByte = bytes.Length;
 
             if (!AddByte(ref bytes, nDummyChecksum))
                 return null;
@@ -88,8 +88,7 @@ namespace ArtifactAPI.Encoding
                 DecodedHero casted = null;
                 if (card is DecodedHero)
                     casted = (DecodedHero)card;
-
-                if (casted == null)
+                else
                     continue;
 
                 if (casted.Turn == 0)
@@ -109,17 +108,16 @@ namespace ArtifactAPI.Encoding
             {
                 //see how many cards we can group together
                 CardId card = allCards[nCurrCard];
+                if (card.Id <= 0)
+                    continue;
+
                 DecodedCard castedCard = null;
                 if (card is DecodedCard)
                     castedCard = (DecodedCard)card;
-
-                if (castedCard == null)
+                else
                     continue;
 
                 if (castedCard.Count == 0)
-                    continue;
-
-                if (castedCard.Id <= 0)
                     continue;
 
                 //record this set of cards, and advance
@@ -154,7 +152,7 @@ namespace ArtifactAPI.Encoding
             int unChecksum = 0;
             for (int unAddCheck = HeaderSize; unAddCheck < unNumBytes + HeaderSize; unAddCheck++)
             {
-                var b = bytes[unAddCheck];
+                byte b = bytes[unAddCheck];
                 unChecksum += b;
             }
             return unChecksum;
@@ -228,7 +226,7 @@ namespace ArtifactAPI.Encoding
             int unNumBytes = 0;
             while (unValue > 0)
             {
-                var unNextByte = ExtractNBitsWithCarry(unValue, 7);
+                byte unNextByte = ExtractNBitsWithCarry(unValue, 7);
                 unValue >>= 7;
 
                 if (!AddByte(ref bytes, unNextByte))
@@ -248,14 +246,14 @@ namespace ArtifactAPI.Encoding
                 return null;
 
             //byte[] packed = pack("C*", bytes);
-            string encoded = System.Text.Encoding.UTF8.GetString(bytes);
+            string encoded = System.Convert.ToBase64String(bytes);
             string deck_string = EncodePrefix + encoded;
 
-            //deck_string = deck_string.Replace('-', '/');
-            //deck_string = deck_string.Replace('_', '=');
-            //string fixedString = deck_string;
+            deck_string = deck_string.Replace('/', '-');
+            deck_string = deck_string.Replace('=', '_');
+            string fixedString = deck_string;
 
-            return deck_string;
+            return fixedString;
         }
     }
 
@@ -269,7 +267,8 @@ namespace ArtifactAPI.Encoding
                 return 1;
             else
                 return 0;
-            return x.Id <= y.Id ? -1 : 1;
+
+            //return x.Id <= y.Id ? -1 : 1;
         }
     }
 }
