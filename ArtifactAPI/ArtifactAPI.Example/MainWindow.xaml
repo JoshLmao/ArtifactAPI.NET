@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArtifactAPI.Example"
+        xmlns:artifactModels="clr-namespace:ArtifactAPI.Models;assembly=ArtifactAPI"
+        xmlns:converters="clr-namespace:ArtifactAPI.Example.Converters"
         mc:Ignorable="d"
         Title="Artifact Deck Builder Example" Height="450" Width="800"
         Name="c_exampleWindow">
+    <Window.Resources>
+        <converters:UrlToImageConverter x:Key="u2ic"/>
+        <converters:CardColorToColorConverter x:Key="cc2cc"/>
+    </Window.Resources>
     <Grid>
         <TabControl>
             <TabItem Header="Deck Viewer">
@@ -25,39 +31,61 @@
                                    MouseDown="OnOpenOnWebsite" MouseEnter="OnMouseEnterHyperlink" MouseLeave="OnMouseLeaveHyperlink"/>
                     </StackPanel>
                     <!--Row 1-->
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <!--Deck Name-->
-                            <StackPanel Background="Gray">
-                                <TextBlock Name="tb_DeckName" Text="ExampleDeckName" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                            <!--Heroes-->
-                            <Grid Margin="10,3">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1">
+                                <!--Deck Name-->
+                                <StackPanel Background="Gray">
+                                    <TextBlock Name="tb_DeckName" Text="ExampleDeckName" HorizontalAlignment="Center" Margin="7,5" FontSize="20" Foreground="White"/>
+                                </StackPanel>
+                                <!--Heroes-->
+                                <Grid Margin="10,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
 
-                                <Image Name="img_HeroOne" Height="50" Margin="10"/>
-                                <Image Name="img_HeroTwo" Grid.Column="1" Height="50" Margin="10"/>
-                                <Image Name="img_HeroThree" Grid.Column="2" Height="50" Margin="10"/>
-                                <!--Turn Separator-->
-                                <Rectangle Grid.Column="2" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-                                <Image Name="img_HeroFour" Grid.Column="3" Height="50" Margin="10"/>
-                                <!--Turn Separator-->
-                                <Rectangle Grid.Column="3" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-                                <Image Name="img_HeroFive" Grid.Column="4" Height="50" Margin="10"/>
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
+                                    <Image Name="img_HeroOne" Height="50" Margin="10"/>
+                                    <Image Name="img_HeroTwo" Grid.Column="1" Height="50" Margin="10"/>
+                                    <Image Name="img_HeroThree" Grid.Column="2" Height="50" Margin="10"/>
+                                    <!--Turn Separator-->
+                                    <Rectangle Grid.Column="2" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+                                    <Image Name="img_HeroFour" Grid.Column="3" Height="50" Margin="10"/>
+                                    <!--Turn Separator-->
+                                    <Rectangle Grid.Column="3" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+                                    <Image Name="img_HeroFive" Grid.Column="4" Height="50" Margin="10"/>
+                                </Grid>
+                                <!--Other Cards-->
+                                <ItemsControl Name="ic_genericCardsList">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type artifactModels:GenericCard}">
+                                            <DockPanel Background="{Binding Converter={StaticResource cc2cc}}">
+                                                <Image Source="{Binding MiniImage.Default, Converter={StaticResource u2ic}}"
+                                                   Width="50" Height="50"/>
+                                                <TextBlock Text="{Binding Amount, StringFormat=x{0}}" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="5" 
+                                                           FontSize="20" Foreground="White"/>
+                                                <TextBlock Text="{Binding Names.English}" Margin="5,3" VerticalAlignment="Center" 
+                                                           FontSize="15" Foreground="White"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem Header="Deck Builder">

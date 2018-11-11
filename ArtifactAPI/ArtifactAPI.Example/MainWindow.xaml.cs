@@ -49,6 +49,8 @@ namespace ArtifactAPI.Example
                 return;
             }
 
+            tb_DeckName.Text = decodedDeck.Name;
+
             Deck deck = m_client.GetCardsFromDecodedDeck(decodedDeck);
 
             List<System.Windows.Controls.Image> heroImageHolders = new List<System.Windows.Controls.Image>()
@@ -68,9 +70,12 @@ namespace ArtifactAPI.Example
 
                 heroImageHolders[turn - 1 + additional].Source = GetImageFromUrl(deck.Heroes[i].IngameImage.Default);
             }
+
+            //Set all other cards
+            ic_genericCardsList.ItemsSource = deck.Cards;
         }
 
-        private BitmapImage GetImageFromUrl(string url)
+        public static BitmapImage GetImageFromUrl(string url)
         {
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
