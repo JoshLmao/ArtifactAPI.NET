@@ -14,6 +14,7 @@
         <converters:CardColorToColorConverter x:Key="cc2cc"/>
         <converters:TypeToIconConverter x:Key="t2ic"/>
         <converters:DisplayCostByTypeConverter x:Key="dcbtc"/>
+        <converters:IsSignatureCardConverter x:Key="iscc"/>
     </Window.Resources>
     <Grid>
         <TabControl>
@@ -91,8 +92,11 @@
                                                            FontSize="20" Foreground="White"/>
                                                 <Image Width="40" Height="40" Source="{Binding Converter={StaticResource t2ic}}" VerticalAlignment="Center" Margin="1"/>
                                                 <TextBlock Text="{Binding Converter={StaticResource dcbtc}}" FontSize="15" Foreground="White" DockPanel.Dock="Left" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding Names.English}" Margin="5,3" VerticalAlignment="Center" 
-                                                           FontSize="15" Foreground="White"/>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Names.English}" Margin="5,0,5,3" FontSize="15" Foreground="White"/>
+                                                    <TextBlock Text="Signature Card" Foreground="Pink" Visibility="{Binding Converter={StaticResource iscc}}"/>
+                                                </StackPanel>
+                                                
                                             </DockPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>

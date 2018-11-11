@@ -53,19 +53,71 @@ namespace ArtifactAPI
             }
 
             string stageTwoContent = Request(m_oClient, stage.URL);
-            CardSet cards = null;
+            CardSet cardSet = null;
             try
             {
-                cards = JsonConvert.DeserializeObject<CardSet>(stageTwoContent, new CardToSpecificJsonConverter());
+                cardSet = JsonConvert.DeserializeObject<CardSet>(stageTwoContent, new CardToSpecificJsonConverter());
             }
             catch(Exception e)
             {
                 Console.WriteLine($"Failed to deserialize - {e}");
             }
 
-            m_loadedHeroes = cards.Set.Cards;
+            cardSet.Set.Cards = SetSignatureCards(cardSet);
 
-            return cards;
+            return cardSet;
+        }
+
+        private List<Card> SetSignatureCards(CardSet cardSet)
+        {
+            List<Card> modifyCards = new List<Card>(cardSet.Set.Cards);
+
+            foreach(Card gCard in cardSet.Set.Cards)
+            {
+                if(gCard is HeroCard)
+                {
+                    if(gCard.References != null)
+                    {
+                        foreach(Reference r in gCard.References)
+                        {
+                            if(r.Type.ToLower() == "includes")
+                            {
+                                GenericCard g = (GenericCard)modifyCards.FirstOrDefault(x => x.Id == r.Id);
+                                modifyCards.Remove(g);
+                                SignatureCard sigCard = new SignatureCard()
+                                {
+                                    Amount = g.Amount,
+                                    Armor = g.Armor,
+                                    AttackDmg = g.AttackDmg,
+                                    BaseId = g.BaseId,
+                                    GoldCost = g.GoldCost,
+                                    HitPoints = g.HitPoints,
+                                    Id = g.Id,
+                                    Illustrator = g.Illustrator,
+                                    IngameImage = g.IngameImage,
+                                    IsBlack = g.IsBlack,
+                                    IsBlue = g.IsBlue,
+                                    IsGreen = g.IsGreen,
+                                    IsRed = g.IsRed,
+                                    ItemDef = g.ItemDef,
+                                    LargeImage = g.LargeImage,
+                                    ManaCost = g.ManaCost,
+                                    MiniImage = g.MiniImage,
+                                    Names = g.Names,
+                                    Rarity = g.Rarity,
+                                    References = g.References,
+                                    SubType = g.SubType,
+                                    Text = g.Text,
+                                    Type = g.Type,
+                                };
+                                modifyCards.Add(sigCard);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return modifyCards;
         }
 
         /// <summary>
@@ -96,8 +148,12 @@ namespace ArtifactAPI
 
         public Card GetCard(int id)
         {
-            if(m_loadedHeroes == null)
+            if (m_loadedHeroes == null)
+            {
                 m_loadedHeroes = GetCardSet("01").Set.Cards;
+                var other = GetCardSet("00").Set.Cards;
+                m_loadedHeroes.AddRange(other);
+            }
 
             return m_loadedHeroes.FirstOrDefault(x => x.Id == id);
         }
@@ -108,6 +164,7 @@ namespace ArtifactAPI
                 return null;
 
             List<HeroCard> heroCards = new List<HeroCard>();
+            List<GenericCard> genericCards = new List<GenericCard>();
             foreach(DecodedHero dHero in decodedDeck.Heroes)
             {
                 Card card = GetCard(dHero.Id);
@@ -117,10 +174,19 @@ namespace ArtifactAPI
                 HeroCard heroCard = (HeroCard)card;
                 heroCard.Turn = dHero.Turn;
 
+                if(heroCard.References != null)
+                {
+                    foreach (Reference referenceCard in heroCard.References)
+                    {
+                        Card refCard = GetCard(referenceCard.Id);
+                        if (refCard is SignatureCard)
+                            genericCards.Add((SignatureCard)refCard);
+                    }
+                }
+
                 heroCards.Add(heroCard);
             }
 
-            List<GenericCard> genericCards = new List<GenericCard>();
             foreach(DecodedCard dCard in decodedDeck.Cards)
             {
                 Card card = GetCard(dCard.Id);

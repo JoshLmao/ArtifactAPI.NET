@@ -5,26 +5,16 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ArtifactAPI.Example.Converters
 {
-    class DisplayCostByTypeConverter : IValueConverter
+    class IsSignatureCardConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            GenericCard card = value is GenericCard ? (GenericCard)value : null;
-            if (card == null)
-                return null;
-
-            if (card.Type.ToLower() == "item")
-            {
-                return card.GoldCost;
-            }
-            else
-            {
-                return card.ManaCost;
-            }
+            return value is SignatureCard ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

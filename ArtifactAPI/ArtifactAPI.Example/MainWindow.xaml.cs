@@ -74,7 +74,7 @@ namespace ArtifactAPI.Example
             //Set all other cards
             ic_genericCardsList.ItemsSource = deck.Cards;
 
-            int totalGeneric = deck.Cards.Sum(x => x.Amount);
+            int totalGeneric = deck.Cards.Sum(x => x is GenericCard ? ((GenericCard)x).Amount : 0);
             t_totalCards.Text = $"{deck.Heroes.Count + totalGeneric} CARDS";
         }
 

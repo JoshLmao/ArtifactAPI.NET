@@ -44,6 +44,10 @@ namespace ArtifactAPI
                 {
                     return new HeroCard();
                 }
+                //else if(type.ToLower() == "spell")
+                //{
+                //    return new SignatureCard();
+                //}
             }
 
             return new GenericCard();

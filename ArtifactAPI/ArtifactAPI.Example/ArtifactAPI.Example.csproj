@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="Converters\CardColorToColorConverter.cs" />
     <Compile Include="Converters\DisplayCostByTypeConverter.cs" />
+    <Compile Include="Converters\IsSignatureCardConverter.cs" />
     <Compile Include="Converters\TypeToIconConverter.cs" />
     <Compile Include="Converters\UrlToImageConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">

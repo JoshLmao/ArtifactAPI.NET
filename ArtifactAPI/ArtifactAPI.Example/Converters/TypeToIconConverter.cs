@@ -14,7 +14,10 @@ namespace ArtifactAPI.Example.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            GenericCard card = (GenericCard)value;
+            GenericCard card = value is GenericCard ? (GenericCard)value : null;
+            if (card == null)
+                return null;
+
             string type = (string)card.Type;
             switch (type.ToLower())
             {

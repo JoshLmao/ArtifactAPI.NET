@@ -14,9 +14,9 @@ namespace ArtifactAPI.Example.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            GenericCard card = (GenericCard)value;
+            GenericCard card = value is GenericCard ? (GenericCard)value : null;
             if (card == null)
-                throw new NotSupportedException("Not supporting null ;)");
+                return null;
 
             if (card.IsBlack)
                 return new SolidColorBrush(Color.FromArgb(255, 52, 52, 52));

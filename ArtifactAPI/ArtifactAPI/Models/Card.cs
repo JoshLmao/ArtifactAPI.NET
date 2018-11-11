@@ -128,7 +128,7 @@ namespace ArtifactAPI.Models
     public class Reference
     {
         [JsonProperty("card_id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("ref_type")]
         public string Type { get; set; }
