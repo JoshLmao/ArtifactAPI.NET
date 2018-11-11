@@ -12,6 +12,8 @@
     <Window.Resources>
         <converters:UrlToImageConverter x:Key="u2ic"/>
         <converters:CardColorToColorConverter x:Key="cc2cc"/>
+        <converters:TypeToIconConverter x:Key="t2ic"/>
+        <converters:DisplayCostByTypeConverter x:Key="dcbtc"/>
     </Window.Resources>
     <Grid>
         <TabControl>
@@ -63,6 +65,16 @@
                                     <Rectangle Grid.Column="3" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
                                     <Image Name="img_HeroFive" Grid.Column="4" Height="50" Margin="10"/>
                                 </Grid>
+                                <!--Deck stats-->
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Name="t_totalCards" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
                                 <!--Other Cards-->
                                 <ItemsControl Name="ic_genericCardsList">
                                     <ItemsControl.ItemsPanel>
@@ -74,9 +86,11 @@
                                         <DataTemplate DataType="{x:Type artifactModels:GenericCard}">
                                             <DockPanel Background="{Binding Converter={StaticResource cc2cc}}">
                                                 <Image Source="{Binding MiniImage.Default, Converter={StaticResource u2ic}}"
-                                                   Width="50" Height="50"/>
+                                                   Width="50" Height="50" DockPanel.Dock="Left"/>
                                                 <TextBlock Text="{Binding Amount, StringFormat=x{0}}" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="5" 
                                                            FontSize="20" Foreground="White"/>
+                                                <Image Width="40" Height="40" Source="{Binding Converter={StaticResource t2ic}}" VerticalAlignment="Center" Margin="1"/>
+                                                <TextBlock Text="{Binding Converter={StaticResource dcbtc}}" FontSize="15" Foreground="White" DockPanel.Dock="Left" VerticalAlignment="Center"/>
                                                 <TextBlock Text="{Binding Names.English}" Margin="5,3" VerticalAlignment="Center" 
                                                            FontSize="15" Foreground="White"/>
                                             </DockPanel>
