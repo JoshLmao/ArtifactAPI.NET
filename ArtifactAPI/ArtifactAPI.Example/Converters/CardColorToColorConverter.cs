@@ -18,18 +18,20 @@ namespace ArtifactAPI.Example.Converters
             if (card == null)
                 return null;
 
+            Enums.Colors color = Enums.Colors.Black;
             if (card.IsBlack)
-                return new SolidColorBrush(Color.FromArgb(255, 52, 52, 52));
+                color = Enums.Colors.Black;
             else if (card.IsRed)
-                return new SolidColorBrush(Color.FromArgb(255, 81, 15, 29));
+                color = Enums.Colors.Red;
             else if (card.IsBlue)
-                return new SolidColorBrush(Color.FromArgb(255, 26, 68, 93));
+                color = Enums.Colors.Blue;
             else if (card.IsGreen)
-                return new SolidColorBrush(Color.FromArgb(255, 37, 87, 49));
+                color = Enums.Colors.Green;
             else if (card.Type.ToLower() == "item")
                 return new SolidColorBrush(Color.FromArgb(255, 82, 65, 39));
 
-            throw new NotImplementedException("Not implemented color!");
+            FactionColorEnumToColorConverter cc = new FactionColorEnumToColorConverter();
+            return cc.Convert(color, null, null, null);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

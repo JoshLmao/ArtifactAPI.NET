@@ -72,13 +72,81 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" TextElement.FontSize="15">
-                                        <TextBlock Name="t_totalCards" Margin="5,3"/>
-                                        <TextBlock Name="t_totalItems" Margin="5,3"/>
-                                        <Grid>
-                                            
-                                        </Grid>
-                                    </StackPanel>
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" TextElement.FontSize="15">
+                                            <TextBlock Name="t_totalCards" Margin="5,3" Text="X TOTAL"/>
+                                            <TextBlock Name="t_totalItems" Margin="5,3" Text="X ITEMS"/>
+                                        </StackPanel>
+                                        <ItemsControl Name="ic_deckStats" Grid.Row="1">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <Grid/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type local:ManaDeckInfoDto}">
+                                                    <!--Deck stats-->
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <DockPanel Margin="5,0">
+                                                            <ProgressBar Value="{Binding OneManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="1" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="1">
+                                                            <ProgressBar Value="{Binding TwoManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="2" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="2">
+                                                            <ProgressBar Value="{Binding ThreeManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="3" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="3">
+                                                            <ProgressBar Value="{Binding FourManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="4" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="4">
+                                                            <ProgressBar Value="{Binding FiveManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="5" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="5">
+                                                            <ProgressBar Value="{Binding SixManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="6" DockPanel.Dock="Bottom"  HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="6">
+                                                            <ProgressBar Value="{Binding SevenManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="7" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="7">
+                                                            <ProgressBar Value="{Binding EightPlusManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="8" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <StackPanel Margin="5,0" Grid.Column="8" Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Grid Background="{Binding ColorOneBrush, FallbackValue=Orange}" Height="30" Width="30">
+                                                                <TextBlock Text="{Binding ColorOneTotalManaCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Grid>
+                                                            <Grid Background="{Binding ColorTwoBrush, FallbackValue=Yellow}" Height="30" Width="30" Margin="5,0">
+                                                                <TextBlock Text="{Binding ColorTwoTotalManaCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Grid>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
                                 </Grid>
                                 <!--Other Cards-->
                                 <ItemsControl Name="ic_genericCardsList">
@@ -105,7 +173,6 @@
                                                     <!--Signature Card-->
                                                     <TextBlock Text="Signature Card" Foreground="Pink" Visibility="{Binding Converter={StaticResource iscc}}"/>
                                                 </StackPanel>
-                                                
                                             </DockPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
