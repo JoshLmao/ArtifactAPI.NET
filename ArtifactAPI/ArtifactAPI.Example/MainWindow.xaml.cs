@@ -119,6 +119,15 @@ namespace ArtifactAPI.Example
                                                     deckManaInfo.EightPlusManaCards);
 
             ic_deckStats.ItemsSource = new List<ManaDeckInfoDto>() { deckManaInfo };
+
+            t_TCSpell.Text = deck.Cards.Sum(x => x.Type.ToLower() == "spell" ? x.Amount : 0).ToString();
+            t_TCCreep.Text = deck.Cards.Sum(x => x.Type.ToLower() == "creep" ? x.Amount : 0).ToString();
+            t_TCImprovement.Text = deck.Cards.Sum(x => (x.Type.ToLower() == "improvement") ? x.Amount : 0).ToString();
+
+            t_TIarmor.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "armor" ? x.Amount : 0).ToString();
+            t_TIweapon.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "weapon" ? x.Amount : 0).ToString();
+            t_TIhealth.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "accessory" ? x.Amount : 0).ToString();
+            t_TIconsumable.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "consumable" ? x.Amount : 0).ToString();
         }
 
         private int GetManaAmount(List<GenericCard> cards, int manaCostAmount)

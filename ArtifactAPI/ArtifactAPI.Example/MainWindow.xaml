@@ -77,10 +77,73 @@
                                             <RowDefinition/>
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" TextElement.FontSize="15">
-                                            <TextBlock Name="t_totalCards" Margin="5,3" Text="X TOTAL"/>
-                                            <TextBlock Name="t_totalItems" Margin="5,3" Text="X ITEMS"/>
-                                        </StackPanel>
+                                        <!--Overall Deck Stats-->
+                                        <Grid HorizontalAlignment="Center" Margin="0,0,0,20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid Margin="10,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Name="t_totalCards" Margin="5,3" Text="X TOTAL" FontSize="15" HorizontalAlignment="Center"/>
+                                                <Grid Grid.Row="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <Image Source="/Images/card_type_spell.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TCSpell" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                                                        <Image Source="/Images/card_type_creep.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TCCreep" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="2">
+                                                        <Image Source="/Images/card_type_improvement.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TCImprovement" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                            <!--Item Stats-->
+                                            <Grid Grid.Column="1" Margin="10,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Name="t_totalItems" Margin="5,3" Text="X ITEMS" FontSize="15" HorizontalAlignment="Center"/>
+                                                <Grid Grid.Row="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <Image Source="/Images/card_type_weapon.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIweapon" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                                                        <Image Source="/Images/card_type_armor.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIarmor" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="2">
+                                                        <Image Source="/Images/card_type_health.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIhealth" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="4">
+                                                        <Image Source="/Images/card_type_consumable.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIconsumable" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        
+                                        <!--Overall Card Stats-->
                                         <ItemsControl Name="ic_deckStats" Grid.Row="1">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
