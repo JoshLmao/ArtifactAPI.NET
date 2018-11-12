@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace ArtifactAPI.Models
 {
-    public class Deck
+    public class SignatureCard : GenericCard
     {
-        public string Name { get; set; }
-        public List<HeroCard> Heroes { get; set; }
-        public List<GenericCard> Cards {get;set;}
     }
 }

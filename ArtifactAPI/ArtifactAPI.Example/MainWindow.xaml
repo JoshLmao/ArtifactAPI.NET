@@ -1,0 +1,255 @@
+﻿<Window x:Class="ArtifactAPI.Example.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArtifactAPI.Example"
+        xmlns:artifactModels="clr-namespace:ArtifactAPI.Models;assembly=ArtifactAPI"
+        xmlns:converters="clr-namespace:ArtifactAPI.Example.Converters"
+        mc:Ignorable="d"
+        Title="Artifact Deck Builder Example" Height="450" Width="800"
+        Name="c_exampleWindow">
+    <Window.Resources>
+        <converters:UrlToImageConverter x:Key="u2ic"/>
+        <converters:CardColorToColorConverter x:Key="cc2cc"/>
+        <converters:TypeToIconConverter x:Key="t2ic"/>
+        <converters:DisplayCostByTypeConverter x:Key="dcbtc"/>
+        <converters:IsSignatureCardConverter x:Key="iscc"/>
+    </Window.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Deck Viewer">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <!--Row 0-->
+                    <StackPanel Margin="0,3">
+                        <DockPanel>
+                            <TextBlock Text="Insert Deck Code:" DockPanel.Dock="Left" Margin="5,3"/>
+                            <TextBox Name="tb_DeckCode" HorizontalAlignment="Stretch" Margin="5,0"/>
+                        </DockPanel>
+                        <TextBlock HorizontalAlignment="Center" Text="View On PlayArtifact.com"  TextDecorations="underline" Foreground="Blue" Margin="5,3"
+                                   MouseDown="OnOpenOnWebsite" MouseEnter="OnMouseEnterHyperlink" MouseLeave="OnMouseLeaveHyperlink"/>
+                    </StackPanel>
+                    <!--Row 1-->
+                    <ScrollViewer Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1">
+                                <!--Deck Name-->
+                                <StackPanel Background="Gray">
+                                    <TextBlock Name="tb_DeckName" Text="ExampleDeckName" HorizontalAlignment="Center" Margin="7,5" FontSize="20" Foreground="White"/>
+                                </StackPanel>
+                                <!--Heroes-->
+                                <Grid Margin="10,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Image Name="img_HeroOne" Height="50" Margin="10"/>
+                                    <Image Name="img_HeroTwo" Grid.Column="1" Height="50" Margin="10"/>
+                                    <Image Name="img_HeroThree" Grid.Column="2" Height="50" Margin="10"/>
+                                    <!--Turn Separator-->
+                                    <Rectangle Grid.Column="2" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+                                    <Image Name="img_HeroFour" Grid.Column="3" Height="50" Margin="10"/>
+                                    <!--Turn Separator-->
+                                    <Rectangle Grid.Column="3" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+                                    <Image Name="img_HeroFive" Grid.Column="4" Height="50" Margin="10"/>
+                                </Grid>
+                                <!--Deck stats-->
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <!--Overall Deck Stats-->
+                                        <Grid HorizontalAlignment="Center" Margin="0,0,0,20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid Margin="10,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Name="t_totalCards" Margin="5,3" Text="X TOTAL" FontSize="15" HorizontalAlignment="Center"/>
+                                                <Grid Grid.Row="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <Image Source="/Images/card_type_spell.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TCSpell" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                                                        <Image Source="/Images/card_type_creep.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TCCreep" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="2">
+                                                        <Image Source="/Images/card_type_improvement.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TCImprovement" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                            <!--Item Stats-->
+                                            <Grid Grid.Column="1" Margin="10,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Name="t_totalItems" Margin="5,3" Text="X ITEMS" FontSize="15" HorizontalAlignment="Center"/>
+                                                <Grid Grid.Row="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <Image Source="/Images/card_type_weapon.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIweapon" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="1">
+                                                        <Image Source="/Images/card_type_armor.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIarmor" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="2">
+                                                        <Image Source="/Images/card_type_health.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIhealth" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Vertical" Grid.Column="4">
+                                                        <Image Source="/Images/card_type_consumable.png" Height="30" Width="30"/>
+                                                        <TextBlock Name="t_TIconsumable" Text="99" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        
+                                        <!--Overall Card Stats-->
+                                        <ItemsControl Name="ic_deckStats" Grid.Row="1">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <Grid/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type local:ManaDeckInfoDto}">
+                                                    <!--Deck stats-->
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <DockPanel Margin="5,0">
+                                                            <ProgressBar Value="{Binding OneManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="1" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="1">
+                                                            <ProgressBar Value="{Binding TwoManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="2" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="2">
+                                                            <ProgressBar Value="{Binding ThreeManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="3" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="3">
+                                                            <ProgressBar Value="{Binding FourManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="4" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="4">
+                                                            <ProgressBar Value="{Binding FiveManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="5" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="5">
+                                                            <ProgressBar Value="{Binding SixManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="6" DockPanel.Dock="Bottom"  HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="6">
+                                                            <ProgressBar Value="{Binding SevenManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="7" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <DockPanel Margin="5,0" Grid.Column="7">
+                                                            <ProgressBar Value="{Binding EightPlusManaCards}" Maximum="{Binding MaxManaCardCount}" DockPanel.Dock="Top" Orientation="Vertical" Height="40"/>
+                                                            <TextBlock Text="8" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>
+                                                        </DockPanel>
+                                                        <StackPanel Margin="5,0" Grid.Column="8" Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Grid Background="{Binding ColorOneBrush, FallbackValue=Orange}" Height="30" Width="30">
+                                                                <TextBlock Text="{Binding ColorOneTotalCardCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="White"/>
+                                                            </Grid>
+                                                            <Grid Background="{Binding ColorTwoBrush, FallbackValue=Yellow}" Height="30" Width="30" Margin="5,0">
+                                                                <TextBlock Text="{Binding ColorTwoTotalCardCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="White"/>
+                                                            </Grid>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </Grid>
+                                <!--Other Cards-->
+                                <ItemsControl Name="ic_genericCardsList">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type artifactModels:GenericCard}">
+                                            <DockPanel Background="{Binding Converter={StaticResource cc2cc}}">
+                                                <Image Source="{Binding MiniImage.Default, Converter={StaticResource u2ic}}"
+                                                   Width="50" Height="50" DockPanel.Dock="Left"/>
+                                                <!--Card Amount-->
+                                                <TextBlock Text="{Binding Amount, StringFormat=x{0}}" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,5" 
+                                                           FontSize="20" Foreground="White"/>
+                                                <!--Card type icon-->
+                                                <Image Width="40" Height="40" Source="{Binding Converter={StaticResource t2ic}}" VerticalAlignment="Center" Margin="1"/>
+                                                <TextBlock Text="{Binding Converter={StaticResource dcbtc}}" FontSize="15" Foreground="White" DockPanel.Dock="Left" VerticalAlignment="Center"
+                                                           Width="18"/>
+                                                <StackPanel VerticalAlignment="Center" Margin="10,0">
+                                                    <!--Card name-->
+                                                    <TextBlock Text="{Binding Names.English}" FontSize="15" Foreground="White"/>
+                                                    <!--Signature Card-->
+                                                    <TextBlock Text="Signature Card" Foreground="Pink" Visibility="{Binding Converter={StaticResource iscc}}"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Deck Builder">
+                
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

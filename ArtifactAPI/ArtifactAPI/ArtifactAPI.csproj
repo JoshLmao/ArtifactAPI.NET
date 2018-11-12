@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArtifactClient.cs" />
+    <Compile Include="CardToSpecificJsonConverter.cs" />
     <Compile Include="Encoding\DeckDecoder.cs" />
     <Compile Include="Encoding\DeckEncoder.cs" />
     <Compile Include="Encoding\Helper.cs" />
@@ -58,8 +59,11 @@
     <Compile Include="Models\Deck.cs" />
     <Compile Include="Models\CardSets.cs" />
     <Compile Include="Models\DecodedDeck.cs" />
+    <Compile Include="Models\GenericCard.cs" />
+    <Compile Include="Models\HeroCard.cs" />
     <Compile Include="Models\Image.cs" />
     <Compile Include="Enums\Rarity.cs" />
+    <Compile Include="Models\SignatureCard.cs" />
     <Compile Include="Models\UrlStage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

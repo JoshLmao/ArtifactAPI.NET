@@ -15,11 +15,20 @@ namespace ArtifactAPI.Models
         [JsonProperty("base_card_id")]
         public int BaseId { get; set; }
 
+        [JsonProperty("item_def")]
+        public int ItemDef { get; set; }
+
         /// <summary>
         /// Type of the card
         /// </summary>
         [JsonProperty("card_type")]
         public string Type { get; set; }
+
+        /// <summary>
+        /// Subtype of the card
+        /// </summary>
+        [JsonProperty("sub_type")]
+        public string SubType { get; set; }
 
         /// <summary>
         /// All names of the card in all languages
@@ -89,9 +98,6 @@ namespace ArtifactAPI.Models
         /// </summary>
         [JsonProperty("hit_points")]
         public int HitPoints { get; set; }
-
-        [JsonProperty("item_def")]
-        public int ItemDef { get; set; }
         #endregion
 
         /// <summary>
@@ -122,7 +128,7 @@ namespace ArtifactAPI.Models
     public class Reference
     {
         [JsonProperty("card_id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("ref_type")]
         public string Type { get; set; }
