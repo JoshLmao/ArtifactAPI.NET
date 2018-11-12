@@ -93,9 +93,9 @@ namespace ArtifactAPI.Example
             ic_genericCardsList.ItemsSource = sortedList;
             
             //Total cards excludes items, hence the separate total items UI
-            int totalGeneric = deck.Cards.Sum(x => x is GenericCard && x.Type.ToLower() != "item" ? ((GenericCard)x).Amount : 0);
+            int totalGeneric = deck.Cards.Sum(x => x is GenericCard && x.Type == CardType.Item ? ((GenericCard)x).Amount : 0);
             t_totalCards.Text = $"{totalGeneric} CARDS";
-            t_totalItems.Text = $"{deck.Cards.Sum(x => x.Type.ToLower() == "item" ? x.Amount : 0)} ITEMS";
+            t_totalItems.Text = $"{deck.Cards.Sum(x => x.Type == CardType.Item ? x.Amount : 0)} ITEMS";
 
             //Find out both colors of deck and get stats for each color
             CardColor colorOne = GetOtherColor(deck.Cards, CardColor.None);
@@ -128,14 +128,14 @@ namespace ArtifactAPI.Example
             ic_deckStats.ItemsSource = new List<ManaDeckInfoDto>() { deckManaInfo };
 
             //Set relevant stat information for deck
-            t_TCSpell.Text = deck.Cards.Sum(x => x.Type.ToLower() == "spell" ? x.Amount : 0).ToString();
-            t_TCCreep.Text = deck.Cards.Sum(x => x.Type.ToLower() == "creep" ? x.Amount : 0).ToString();
-            t_TCImprovement.Text = deck.Cards.Sum(x => (x.Type.ToLower() == "improvement") ? x.Amount : 0).ToString();
+            t_TCSpell.Text = deck.Cards.Sum(x => x.Type == CardType.Spell ? x.Amount : 0).ToString();
+            t_TCCreep.Text = deck.Cards.Sum(x => x.Type == CardType.Creep ? x.Amount : 0).ToString();
+            t_TCImprovement.Text = deck.Cards.Sum(x => (x.Type == CardType.Improvement/* == CardSubtypes.Improvement*/) ? x.Amount : 0).ToString();
 
-            t_TIarmor.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "armor" ? x.Amount : 0).ToString();
-            t_TIweapon.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "weapon" ? x.Amount : 0).ToString();
-            t_TIhealth.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "accessory" ? x.Amount : 0).ToString();
-            t_TIconsumable.Text = deck.Cards.Sum(x => x.Type.ToLower() == "item" && x.SubType.ToLower() == "consumable" ? x.Amount : 0).ToString();
+            t_TIarmor.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Armor ? x.Amount : 0).ToString();
+            t_TIweapon.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Weapon ? x.Amount : 0).ToString();
+            t_TIhealth.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Accessory ? x.Amount : 0).ToString();
+            t_TIconsumable.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Consumable ? x.Amount : 0).ToString();
         }
 
         private int GetManaAmount(List<GenericCard> cards, int manaCostAmount)

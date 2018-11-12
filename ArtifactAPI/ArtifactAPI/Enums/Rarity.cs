@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace ArtifactAPI.Enums
 {
     public enum Rarity
     {
+        [EnumMember(Value = "common")]
         Common,
+        [EnumMember(Value = "uncommon")]
         Uncommon,
+        [EnumMember(Value = "rare")]
         Rare
     }
 }

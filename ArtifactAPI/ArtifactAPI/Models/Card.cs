@@ -20,13 +20,13 @@ namespace ArtifactAPI.Models
         /// Type of the card
         /// </summary>
         [JsonProperty("card_type")]
-        public string Type { get; set; }
+        public CardType Type { get; set; }
 
         /// <summary>
         /// Subtype of the card
         /// </summary>
         [JsonProperty("sub_type")]
-        public string SubType { get; set; }
+        public CardType SubType { get; set; }
 
         /// <summary>
         /// All names of the card in all languages
@@ -102,7 +102,7 @@ namespace ArtifactAPI.Models
         /// The rarity of the card
         /// </summary>
         [JsonProperty("rarity")]
-        public string Rarity { get; set; }
+        public Rarity Rarity { get; set; }
 
         /// <summary>
         /// The current color of the card. Can be none for items
@@ -162,18 +162,6 @@ namespace ArtifactAPI.Models
         /// </summary>
         [JsonProperty("references")]
         public List<Reference> References { get; set; }
-
-        public Card()
-        {
-            if (IsBlack)
-                FactionColor = Enums.CardColor.Black;
-            else if (IsGreen)
-                FactionColor = Enums.CardColor.Green;
-            else if (IsRed)
-                FactionColor = Enums.CardColor.Red;
-            else if (IsBlue)
-                FactionColor = Enums.CardColor.Blue;
-        }
     }
 
     public class Reference

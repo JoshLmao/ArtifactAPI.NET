@@ -17,7 +17,7 @@ namespace ArtifactAPI.Example.Converters
             if (card == null)
                 return null;
 
-            if (card.Type.ToLower() == "item")
+            if (card.Type == Enums.CardType.Item)
             {
                 return card.GoldCost;
             }
