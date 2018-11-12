@@ -63,16 +63,22 @@ namespace ArtifactAPI
                 Console.WriteLine($"Failed to deserialize - {e}");
             }
 
-            cardSet.Set.Cards = SetSignatureCards(cardSet);
+            //Set signature cards after all have been loaded
+            //ToDo: Set this at the same stage of deserialize, if possible
+            cardSet.Set.Cards = SetSignatureCards(cardSet.Set.Cards);
 
             return cardSet;
         }
 
-        private List<Card> SetSignatureCards(CardSet cardSet)
+        /// <summary>
+        /// Sorts through cards and sets converts SignatureCards to the correct type
+        /// </summary>
+        /// <param name="cardSet"></param>
+        /// <returns></returns>
+        private List<Card> SetSignatureCards(List<Card> cardSet)
         {
-            List<Card> modifyCards = new List<Card>(cardSet.Set.Cards);
-
-            foreach(Card gCard in cardSet.Set.Cards)
+            List<Card> modifiedCards = new List<Card>(cardSet);
+            foreach(Card gCard in cardSet)
             {
                 if(gCard is HeroCard)
                 {
@@ -82,11 +88,11 @@ namespace ArtifactAPI
                         {
                             if(r.Type.ToLower() == "includes")
                             {
-                                GenericCard g = (GenericCard)modifyCards.FirstOrDefault(x => x.Id == r.Id);
-                                modifyCards.Remove(g);
+                                GenericCard g = (GenericCard)modifiedCards.FirstOrDefault(x => x.Id == r.Id);
+                                modifiedCards.Remove(g);
                                 SignatureCard sigCard = new SignatureCard()
                                 {
-                                    Amount = 3,//g.Amount,
+                                    Amount = 3, //Signature cards always have x3 of theirselves //g.Amount,
                                     Armor = g.Armor,
                                     AttackDmg = g.AttackDmg,
                                     BaseId = g.BaseId,
@@ -110,14 +116,14 @@ namespace ArtifactAPI
                                     Text = g.Text,
                                     Type = g.Type,
                                 };
-                                modifyCards.Add(sigCard);
+                                modifiedCards.Add(sigCard);
                             }
                         }
                     }
                 }
             }
 
-            return modifyCards;
+            return modifiedCards;
         }
 
         /// <summary>
@@ -151,13 +157,18 @@ namespace ArtifactAPI
             if (m_loadedHeroes == null)
             {
                 m_loadedHeroes = GetCardSet("01").Set.Cards;
-                var other = GetCardSet("00").Set.Cards;
-                m_loadedHeroes.AddRange(other);
+                List<Card> otherSet = GetCardSet("00").Set.Cards;
+                m_loadedHeroes.AddRange(otherSet);
             }
 
             return m_loadedHeroes.FirstOrDefault(x => x.Id == id);
         }
 
+        /// <summary>
+        /// Converts a DecodedDeck to return a complete deck with all stats
+        /// </summary>
+        /// <param name="decodedDeck">A DecodedDeck</param>
+        /// <returns>A complete deck with cards and their info</returns>
         public Deck GetCardsFromDecodedDeck(DecodedDeck decodedDeck)
         {
             if (decodedDeck == null)
