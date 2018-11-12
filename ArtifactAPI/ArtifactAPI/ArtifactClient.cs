@@ -86,7 +86,7 @@ namespace ArtifactAPI
                                 modifyCards.Remove(g);
                                 SignatureCard sigCard = new SignatureCard()
                                 {
-                                    Amount = g.Amount,
+                                    Amount = 3,//g.Amount,
                                     Armor = g.Armor,
                                     AttackDmg = g.AttackDmg,
                                     BaseId = g.BaseId,

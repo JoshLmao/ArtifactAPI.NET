@@ -71,11 +71,16 @@ namespace ArtifactAPI.Example
                 heroImageHolders[turn - 1 + additional].Source = GetImageFromUrl(deck.Heroes[i].IngameImage.Default);
             }
 
-            //Set all other cards
-            ic_genericCardsList.ItemsSource = deck.Cards;
+            List<GenericCard> sortedList = deck.Cards.OrderBy(x => x.ManaCost).ToList();
 
-            int totalGeneric = deck.Cards.Sum(x => x is GenericCard ? ((GenericCard)x).Amount : 0);
-            t_totalCards.Text = $"{deck.Heroes.Count + totalGeneric} CARDS";
+            //Set all other cards
+            ic_genericCardsList.ItemsSource = sortedList;
+
+            int totalGeneric = deck.Cards.Sum(x => x is GenericCard && x.Type.ToLower() != "item" ? ((GenericCard)x).Amount : 0);
+            //Total cards are cards that aren't heroes or items
+            t_totalCards.Text = $"{totalGeneric} CARDS";
+
+            t_totalItems.Text = $"{deck.Cards.Sum(x => x.Type.ToLower() == "item" ? x.Amount : 0)} ITEMS"; 
         }
 
         public static BitmapImage GetImageFromUrl(string url)

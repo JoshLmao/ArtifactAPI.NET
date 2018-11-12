@@ -72,8 +72,12 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <StackPanel>
-                                        <TextBlock Name="t_totalCards" HorizontalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" TextElement.FontSize="15">
+                                        <TextBlock Name="t_totalCards" Margin="5,3"/>
+                                        <TextBlock Name="t_totalItems" Margin="5,3"/>
+                                        <Grid>
+                                            
+                                        </Grid>
                                     </StackPanel>
                                 </Grid>
                                 <!--Other Cards-->
@@ -88,12 +92,17 @@
                                             <DockPanel Background="{Binding Converter={StaticResource cc2cc}}">
                                                 <Image Source="{Binding MiniImage.Default, Converter={StaticResource u2ic}}"
                                                    Width="50" Height="50" DockPanel.Dock="Left"/>
+                                                <!--Card Amount-->
                                                 <TextBlock Text="{Binding Amount, StringFormat=x{0}}" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="5" 
                                                            FontSize="20" Foreground="White"/>
+                                                <!--Card type icon-->
                                                 <Image Width="40" Height="40" Source="{Binding Converter={StaticResource t2ic}}" VerticalAlignment="Center" Margin="1"/>
-                                                <TextBlock Text="{Binding Converter={StaticResource dcbtc}}" FontSize="15" Foreground="White" DockPanel.Dock="Left" VerticalAlignment="Center"/>
-                                                <StackPanel VerticalAlignment="Center">
-                                                    <TextBlock Text="{Binding Names.English}" Margin="5,0,5,3" FontSize="15" Foreground="White"/>
+                                                <TextBlock Text="{Binding Converter={StaticResource dcbtc}}" FontSize="15" Foreground="White" DockPanel.Dock="Left" VerticalAlignment="Center"
+                                                           Width="18"/>
+                                                <StackPanel VerticalAlignment="Center" Margin="10,0">
+                                                    <!--Card name-->
+                                                    <TextBlock Text="{Binding Names.English}" FontSize="15" Foreground="White"/>
+                                                    <!--Signature Card-->
                                                     <TextBlock Text="Signature Card" Foreground="Pink" Visibility="{Binding Converter={StaticResource iscc}}"/>
                                                 </StackPanel>
                                                 
