@@ -56,15 +56,15 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Image Name="img_HeroOne" Height="50" Margin="10"/>
-                                    <Image Name="img_HeroTwo" Grid.Column="1" Height="50" Margin="10"/>
-                                    <Image Name="img_HeroThree" Grid.Column="2" Height="50" Margin="10"/>
+                                    <Image Name="img_HeroOne" Height="50" Margin="10" Mouse.MouseDown="OnClickedCard"/>
+                                    <Image Name="img_HeroTwo" Grid.Column="1" Height="50" Margin="10" Mouse.MouseDown="OnClickedCard"/>
+                                    <Image Name="img_HeroThree" Grid.Column="2" Height="50" Margin="10" Mouse.MouseDown="OnClickedCard"/>
                                     <!--Turn Separator-->
                                     <Rectangle Grid.Column="2" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-                                    <Image Name="img_HeroFour" Grid.Column="3" Height="50" Margin="10"/>
+                                    <Image Name="img_HeroFour" Grid.Column="3" Height="50" Margin="10" Mouse.MouseDown="OnClickedCard"/>
                                     <!--Turn Separator-->
                                     <Rectangle Grid.Column="3" Width="2" Fill="Gray"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-                                    <Image Name="img_HeroFive" Grid.Column="4" Height="50" Margin="10"/>
+                                    <Image Name="img_HeroFive" Grid.Column="4" Height="50" Margin="10" Mouse.MouseDown="OnClickedCard"/>
                                 </Grid>
                                 <!--Deck stats-->
                                 <Grid>
@@ -222,7 +222,7 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type artifactModels:GenericCard}">
-                                            <DockPanel Background="{Binding FactionColor, Converter={StaticResource cc2bc}}">
+                                            <DockPanel Background="{Binding FactionColor, Converter={StaticResource cc2bc}}" MouseDown="OnClickedCard">
                                                 <Image Source="{Binding MiniImage.Default, Converter={StaticResource u2ic}}"
                                                    Width="50" Height="50" DockPanel.Dock="Left"/>
                                                 <!--Card Amount-->
@@ -243,6 +243,10 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </StackPanel>
+                            <!--Card Preview-->
+                            <Grid Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                                <Image Name="img_lastClickedCard" MaxWidth="350" VerticalAlignment="Stretch"/>
+                            </Grid>
                         </Grid>
                     </ScrollViewer>
                 </Grid>

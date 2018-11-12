@@ -1,4 +1,5 @@
 ﻿using ArtifactAPI.Encoding;
+using ArtifactAPI.Enums;
 using ArtifactAPI.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,7 +20,7 @@ namespace ArtifactAPI
         private RestClient m_client = null;
         private RestClient m_cdnClient = null;
 
-        List<Card> m_loadedHeroes = null;
+        List<Card> m_loadedCards = null;
 
         public ArtifactClient()
         {
@@ -35,7 +36,19 @@ namespace ArtifactAPI
         }
 
         /// <summary>
-        /// Returns all cards of the set. Currently, the only sets available are "00" and "01"
+        /// Gets all available cards in Artifact
+        /// </summary>
+        /// <returns>All cards</returns>
+        public List<Card> GetAllCards()
+        {
+            m_loadedCards = GetCardSet("00").Set.Cards;
+            List<Card> otherSet = GetCardSet("01").Set.Cards;
+            m_loadedCards.AddRange(otherSet);
+            return m_loadedCards;
+        }
+
+        /// <summary>
+        /// Returns all cards of a set. Currently, the only sets available are "00" and "01"
         /// </summary>
         /// <param name="cardSetId"></param>
         /// <returns></returns>
@@ -163,14 +176,10 @@ namespace ArtifactAPI
         /// <returns>The card information and stats</returns>
         public Card GetCard(int id)
         {
-            if (m_loadedHeroes == null)
-            {
-                m_loadedHeroes = GetCardSet("01").Set.Cards;
-                List<Card> otherSet = GetCardSet("00").Set.Cards;
-                m_loadedHeroes.AddRange(otherSet);
-            }
+            if (m_loadedCards == null)
+                GetAllCards();
 
-            return m_loadedHeroes.FirstOrDefault(x => x.Id == id);
+            return m_loadedCards.FirstOrDefault(x => x.Id == id);
         }
 
         /// <summary>
@@ -227,6 +236,48 @@ namespace ArtifactAPI
             };
 
             return d;
+        }
+
+        /// <summary>
+        /// Returns the url of the art required from the card's id
+        /// </summary>
+        /// <param name="cardId">The number id of the card to get art for</param>
+        /// <param name="artType">The type of art needed</param>
+        /// <returns>The url of the image</returns>
+        public string GetCardArtUrl(int cardId, ArtType artType)
+        {
+            if (m_loadedCards == null)
+                GetAllCards();
+
+            Card card = m_loadedCards.FirstOrDefault(x => x.Id == cardId);
+            if (card == null)
+                return null;
+
+            switch (artType)
+            {
+                case ArtType.Sprite:
+                    return card.IngameImage.Default;
+                case ArtType.Mini:
+                    return card.MiniImage.Default;
+                case ArtType.Large:
+                    return card.LargeImage.Default;
+                case ArtType.Ingame:
+                    return card.IngameImage.Default;
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the url of the art required from the card name
+        /// </summary>
+        /// <param name="cardName">The name of the card (in English)</param>
+        /// <param name="artType">The type of art needed</param>
+        /// <returns>The url of the image</returns>
+        public string GetCardArtUrl(string cardName, ArtType artType)
+        {
+            Card c = m_loadedCards.FirstOrDefault(x => x.Names.English == cardName);
+            return GetCardArtUrl(c.Id, artType);
         }
     }
 }

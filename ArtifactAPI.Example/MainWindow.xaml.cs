@@ -30,6 +30,7 @@ namespace ArtifactAPI.Example
 
             c_exampleWindow.Loaded += OnViewLoaded;
             tb_DeckCode.TextChanged += OnDeckCodeChanged;
+            
         }
 
         private void OnViewLoaded(object sender, RoutedEventArgs e)
@@ -85,7 +86,9 @@ namespace ArtifactAPI.Example
                 while (heroImageHolders[turn - 1 + additional].Source != null)
                     additional++;
 
-                heroImageHolders[turn - 1 + additional].Source = GetImageFromUrl(deck.Heroes[i].IngameImage.Default);
+                System.Windows.Controls.Image img = heroImageHolders[turn - 1 + additional];
+                img.Source = GetImageFromUrl(deck.Heroes[i].IngameImage.Default);
+                img.DataContext = deck.Heroes[i]; //Set context for click event finding card art
             }
 
             //Sort cards by mana cost & set UI
@@ -172,6 +175,9 @@ namespace ArtifactAPI.Example
 
         public static BitmapImage GetImageFromUrl(string url)
         {
+            if (string.IsNullOrEmpty(url))
+                return null;
+
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(url, UriKind.Absolute);
@@ -189,6 +195,19 @@ namespace ArtifactAPI.Example
             System.Diagnostics.Process.Start(urlPrefix + deckCode);
         }
 
+        private void OnClickedCard(object sender, MouseButtonEventArgs e)
+        {
+            FrameworkElement conv = sender as FrameworkElement;
+            if (conv == null)
+                return;
+
+            Card gCard = conv.DataContext as Card;
+            if (gCard == null)
+                return;
+
+            string artUrl = m_client.GetCardArtUrl(gCard.Id, ArtType.Large);
+            img_lastClickedCard.Source = GetImageFromUrl(artUrl);
+        }
 
         private void OnMouseEnterHyperlink(object sender, MouseEventArgs e) { Mouse.OverrideCursor = Cursors.Hand; }
         private void OnMouseLeaveHyperlink(object sender, MouseEventArgs e) { Mouse.OverrideCursor = null; }
