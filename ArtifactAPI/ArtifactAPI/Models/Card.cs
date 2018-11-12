@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using ArtifactAPI.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArtifactAPI.Models
 {
@@ -106,23 +104,76 @@ namespace ArtifactAPI.Models
         [JsonProperty("rarity")]
         public string Rarity { get; set; }
 
-        [JsonProperty("is_black")]
-        public bool IsBlack { get; set; }
+        /// <summary>
+        /// The current color of the card. Can be none for items
+        /// </summary>
+        public CardColor FactionColor { get; set; } = CardColor.None;
 
-        [JsonProperty("is_green")]
-        public bool IsGreen { get; set; }
+        private bool m_isBlack = false;
+        [JsonProperty("is_black"), Obsolete("Use the FactionColor property to get card color")]
+        public bool IsBlack
+        {
+            get { return m_isBlack; }
+            set
+            {
+                m_isBlack = value;
+                FactionColor = Enums.CardColor.Black;
+            }
+        }
 
-        [JsonProperty("is_red")]
-        public bool IsRed { get; set; }
+        private bool m_isGreen = false;
+        [JsonProperty("is_green"), Obsolete("Use the FactionColor property to get card color")]
+        public bool IsGreen
+        {
+            get { return m_isGreen; }
+            set
+            {
+                m_isGreen = value;
+                FactionColor = Enums.CardColor.Green;
+            }
+        }
 
-        [JsonProperty("is_blue")]
-        public bool IsBlue { get; set; }
+        private bool m_isRed = false;
+        [JsonProperty("is_red"), Obsolete("Use the FactionColor property to get card color")]
+        public bool IsRed
+        {
+            get { return m_isRed; }
+            set
+            {
+                m_isRed = value;
+                FactionColor = Enums.CardColor.Red;
+            }
+        }
+
+        private bool m_isBlue = false;
+        [JsonProperty("is_blue"), Obsolete("Use the FactionColor property to get card color")]
+        public bool IsBlue
+        {
+            get { return m_isBlue; }
+            set
+            {
+                m_isBlue = value;
+                FactionColor = Enums.CardColor.Blue;
+            }
+        }
 
         /// <summary>
         /// List of card id's that relate to this card. For example, their active/passive abilities, etc
         /// </summary>
         [JsonProperty("references")]
         public List<Reference> References { get; set; }
+
+        public Card()
+        {
+            if (IsBlack)
+                FactionColor = Enums.CardColor.Black;
+            else if (IsGreen)
+                FactionColor = Enums.CardColor.Green;
+            else if (IsRed)
+                FactionColor = Enums.CardColor.Red;
+            else if (IsBlue)
+                FactionColor = Enums.CardColor.Blue;
+        }
     }
 
     public class Reference

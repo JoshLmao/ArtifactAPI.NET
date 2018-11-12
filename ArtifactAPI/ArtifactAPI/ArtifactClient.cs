@@ -17,14 +17,14 @@ namespace ArtifactAPI
         const string CDN_ROOT_URL = "https://steamcdn-a.akamaihd.net/";
 
         private RestClient m_client = null;
-        private RestClient m_oClient = null;
+        private RestClient m_cdnClient = null;
 
         List<Card> m_loadedHeroes = null;
 
         public ArtifactClient()
         {
             m_client = new RestClient(BASE_URL);
-            m_oClient = new RestClient(CDN_ROOT_URL);
+            m_cdnClient = new RestClient(CDN_ROOT_URL);
         }
 
         private string Request(RestClient client, string requestUrl)
@@ -52,7 +52,7 @@ namespace ArtifactAPI
                 Console.WriteLine(e);
             }
 
-            string stageTwoContent = Request(m_oClient, stage.URL);
+            string stageTwoContent = Request(m_cdnClient, stage.URL);
             CardSet cardSet = null;
             try
             {
@@ -89,6 +89,9 @@ namespace ArtifactAPI
                             if(r.Type.ToLower() == "includes")
                             {
                                 GenericCard g = (GenericCard)modifiedCards.FirstOrDefault(x => x.Id == r.Id);
+                                if (g == null)
+                                    continue;
+
                                 modifiedCards.Remove(g);
                                 SignatureCard sigCard = new SignatureCard()
                                 {
@@ -105,6 +108,7 @@ namespace ArtifactAPI
                                     IsBlue = g.IsBlue,
                                     IsGreen = g.IsGreen,
                                     IsRed = g.IsRed,
+                                    FactionColor = g.FactionColor,
                                     ItemDef = g.ItemDef,
                                     LargeImage = g.LargeImage,
                                     ManaCost = g.ManaCost,
@@ -152,6 +156,11 @@ namespace ArtifactAPI
             return DeckDecoder.Decode(encodedDeckString);
         }
 
+        /// <summary>
+        /// Gets a card from it's id
+        /// </summary>
+        /// <param name="id">The id of the card</param>
+        /// <returns>The card information and stats</returns>
         public Card GetCard(int id)
         {
             if (m_loadedHeroes == null)

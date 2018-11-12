@@ -1,4 +1,5 @@
-﻿using ArtifactAPI.Models;
+﻿using ArtifactAPI.Enums;
+using ArtifactAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,7 @@ namespace ArtifactAPI.Example
             if (tb == null)
                 return;
 
+            //Decode the string into a deck. See if it's valid
             DecodedDeck decodedDeck = m_client.DecodeDeck(tb.Text);
             if (decodedDeck == null)
             {
@@ -49,11 +51,25 @@ namespace ArtifactAPI.Example
                 return;
             }
 
+            //Reset image sources if not null
+            if(img_HeroOne.Source != null)
+                img_HeroOne.Source = null;
+            if (img_HeroTwo.Source != null)
+                img_HeroTwo.Source = null;
+            if (img_HeroThree.Source != null)
+                img_HeroThree.Source = null;
+            if (img_HeroFour.Source != null)
+                img_HeroFour.Source = null;
+            if (img_HeroFive.Source != null)
+                img_HeroFive.Source = null;
+
             //Set the deck name title
             tb_DeckName.Text = decodedDeck.Name;
 
+            //Decode the deck to the complete deck
             Deck deck = m_client.GetCardsFromDecodedDeck(decodedDeck);
 
+            //Populate the hero UI
             List<System.Windows.Controls.Image> heroImageHolders = new List<System.Windows.Controls.Image>()
             {
                 img_HeroOne, img_HeroTwo, img_HeroThree, img_HeroFour, img_HeroFive
@@ -72,19 +88,18 @@ namespace ArtifactAPI.Example
                 heroImageHolders[turn - 1 + additional].Source = GetImageFromUrl(deck.Heroes[i].IngameImage.Default);
             }
 
-            //Sort cards
+            //Sort cards by mana cost & set UI
             List<GenericCard> sortedList = deck.Cards.OrderBy(x => x.ManaCost).ToList();
-            //Set all other cards
             ic_genericCardsList.ItemsSource = sortedList;
-
+            
+            //Total cards excludes items, hence the separate total items UI
             int totalGeneric = deck.Cards.Sum(x => x is GenericCard && x.Type.ToLower() != "item" ? ((GenericCard)x).Amount : 0);
-            //Total cards are cards that aren't heroes or items
             t_totalCards.Text = $"{totalGeneric} CARDS";
             t_totalItems.Text = $"{deck.Cards.Sum(x => x.Type.ToLower() == "item" ? x.Amount : 0)} ITEMS";
 
-            //Find out both colors of deck.
-            Enums.Colors colorOne = GetFirstColor(deck.Cards);
-            Enums.Colors colorTwo = GetOtherColor(colorOne, deck.Cards);
+            //Find out both colors of deck and get stats for each color
+            CardColor colorOne = GetOtherColor(deck.Cards, CardColor.None);
+            CardColor colorTwo = GetOtherColor(deck.Cards, colorOne | CardColor.None);
             ManaDeckInfoDto deckManaInfo = new ManaDeckInfoDto()
             {
                 OneManaCards = GetManaAmount(deck.Cards, 1),
@@ -98,17 +113,8 @@ namespace ArtifactAPI.Example
 
                 ColorOneBrush = FactionColorToBrush(colorOne),
                 ColorTwoBrush = FactionColorToBrush(colorTwo),
-                ColorOneTotalCardCount = deck.Cards.Sum(x => x.IsBlack && colorOne == Enums.Colors.Black
-                                                                || x.IsBlue && colorOne == Enums.Colors.Blue
-                                                                || x.IsGreen && colorOne == Enums.Colors.Green
-                                                                || x.IsRed && colorOne == Enums.Colors.Red 
-                                                                ? x.Amount : 0),
-
-                ColorTwoTotalCardCount = deck.Cards.Sum(x => (x.IsBlack && colorTwo == Enums.Colors.Black
-                                                               || x.IsBlue && colorTwo == Enums.Colors.Blue
-                                                               || x.IsGreen && colorTwo == Enums.Colors.Green
-                                                               || x.IsRed && colorTwo == Enums.Colors.Red)
-                                                               ? x.Amount : 0)
+                ColorOneTotalCardCount = deck.Cards.Sum(x => x.FactionColor == colorOne ? x.Amount : 0),
+                ColorTwoTotalCardCount = deck.Cards.Sum(x => x.FactionColor == colorTwo ? x.Amount : 0),
             };
             deckManaInfo.MaxManaCardCount = GetMaxMana(deckManaInfo.OneManaCards,
                                                     deckManaInfo.TwoManaCards,
@@ -121,6 +127,7 @@ namespace ArtifactAPI.Example
 
             ic_deckStats.ItemsSource = new List<ManaDeckInfoDto>() { deckManaInfo };
 
+            //Set relevant stat information for deck
             t_TCSpell.Text = deck.Cards.Sum(x => x.Type.ToLower() == "spell" ? x.Amount : 0).ToString();
             t_TCCreep.Text = deck.Cards.Sum(x => x.Type.ToLower() == "creep" ? x.Amount : 0).ToString();
             t_TCImprovement.Text = deck.Cards.Sum(x => (x.Type.ToLower() == "improvement") ? x.Amount : 0).ToString();
@@ -136,50 +143,18 @@ namespace ArtifactAPI.Example
             return cards.Sum(x => x.ManaCost == manaCostAmount ? x.Amount : 0);
         }
 
-        private Enums.Colors GetFirstColor(List<GenericCard> cards)
+        private CardColor GetOtherColor(List<GenericCard> cards, CardColor colors)
         {
-            GenericCard card = cards.FirstOrDefault(x => x.IsBlack || x.IsBlue || x.IsGreen || x.IsRed);
-
-            if (card == null)
-                throw new NotImplementedException();
-
-            if (card.IsBlack)
-                return Enums.Colors.Black;
-            else if (card.IsBlue)
-                return Enums.Colors.Blue;
-            else if (card.IsGreen)
-                return Enums.Colors.Green;
-            else if (card.IsRed)
-                return Enums.Colors.Red;
-            else
-                throw new NotImplementedException();
-        }
-
-        private Enums.Colors GetOtherColor(Enums.Colors firstColor, List<GenericCard> cards)
-        {
-            var card = cards.FirstOrDefault(x => x.IsBlack && firstColor != Enums.Colors.Black
-                                                || x.IsBlue && firstColor != Enums.Colors.Black
-                                                || x.IsGreen && firstColor != Enums.Colors.Green
-                                                || x.IsRed && firstColor != Enums.Colors.Red);
+            Card card = cards.FirstOrDefault(x => x.FactionColor != colors);
 
             if(card == null)
                 throw new NotImplementedException();
-
-            if (card.IsBlack)
-                return Enums.Colors.Black;
-            else if (card.IsBlue)
-                return Enums.Colors.Blue;
-            else if (card.IsGreen)
-                return Enums.Colors.Green;
-            else if (card.IsRed)
-                return Enums.Colors.Red;
-            else
-                throw new NotImplementedException();
+            return card.FactionColor;
         }
 
-        private SolidColorBrush FactionColorToBrush(Enums.Colors cardColor)
+        private SolidColorBrush FactionColorToBrush(Enums.CardColor cardColor)
         {
-            Converters.FactionColorEnumToColorConverter converter = new Converters.FactionColorEnumToColorConverter();
+            Converters.CardColorToBrushConverter converter = new Converters.CardColorToBrushConverter();
             return converter.Convert(cardColor, null, null, null) as SolidColorBrush;
         }
 

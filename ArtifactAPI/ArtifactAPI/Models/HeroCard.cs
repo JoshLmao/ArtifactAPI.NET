@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ArtifactAPI.Models
+﻿namespace ArtifactAPI.Models
 {
     public class HeroCard : Card
     {
+        /// <summary>
+        /// The number turn that this card will be deployed on
+        /// </summary>
         public int Turn { get; set; }
     }
 }

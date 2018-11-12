@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace ArtifactAPI.Enums
 {
-    public enum Colors
+    /// <summary>
+    /// The different types of card colors in Artifact
+    /// </summary>
+    public enum CardColor
     {
+        None = 0,
         Red,
         Green,
         Blue,

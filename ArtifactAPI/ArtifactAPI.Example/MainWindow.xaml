@@ -11,7 +11,7 @@
         Name="c_exampleWindow">
     <Window.Resources>
         <converters:UrlToImageConverter x:Key="u2ic"/>
-        <converters:CardColorToColorConverter x:Key="cc2cc"/>
+        <converters:CardColorToBrushConverter x:Key="cc2bc"/>
         <converters:TypeToIconConverter x:Key="t2ic"/>
         <converters:DisplayCostByTypeConverter x:Key="dcbtc"/>
         <converters:IsSignatureCardConverter x:Key="iscc"/>
@@ -222,7 +222,7 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type artifactModels:GenericCard}">
-                                            <DockPanel Background="{Binding Converter={StaticResource cc2cc}}">
+                                            <DockPanel Background="{Binding FactionColor, Converter={StaticResource cc2bc}}">
                                                 <Image Source="{Binding MiniImage.Default, Converter={StaticResource u2ic}}"
                                                    Width="50" Height="50" DockPanel.Dock="Left"/>
                                                 <!--Card Amount-->

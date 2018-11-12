@@ -63,9 +63,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\CardColorToColorConverter.cs" />
     <Compile Include="Converters\DisplayCostByTypeConverter.cs" />
-    <Compile Include="Converters\FactionColorEnumToColorConverter.cs" />
+    <Compile Include="Converters\CardColorToBrushConverter.cs" />
     <Compile Include="Converters\IsSignatureCardConverter.cs" />
     <Compile Include="Converters\TypeToIconConverter.cs" />
     <Compile Include="Converters\UrlToImageConverter.cs" />
