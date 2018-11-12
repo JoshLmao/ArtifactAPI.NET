@@ -49,6 +49,7 @@ namespace ArtifactAPI.Example
                 return;
             }
 
+            //Set the deck name title
             tb_DeckName.Text = decodedDeck.Name;
 
             Deck deck = m_client.GetCardsFromDecodedDeck(decodedDeck);
@@ -71,17 +72,17 @@ namespace ArtifactAPI.Example
                 heroImageHolders[turn - 1 + additional].Source = GetImageFromUrl(deck.Heroes[i].IngameImage.Default);
             }
 
+            //Sort cards
             List<GenericCard> sortedList = deck.Cards.OrderBy(x => x.ManaCost).ToList();
-
             //Set all other cards
             ic_genericCardsList.ItemsSource = sortedList;
 
             int totalGeneric = deck.Cards.Sum(x => x is GenericCard && x.Type.ToLower() != "item" ? ((GenericCard)x).Amount : 0);
             //Total cards are cards that aren't heroes or items
             t_totalCards.Text = $"{totalGeneric} CARDS";
-
             t_totalItems.Text = $"{deck.Cards.Sum(x => x.Type.ToLower() == "item" ? x.Amount : 0)} ITEMS";
 
+            //Find out both colors of deck.
             Enums.Colors colorOne = GetFirstColor(deck.Cards);
             Enums.Colors colorTwo = GetOtherColor(colorOne, deck.Cards);
             ManaDeckInfoDto deckManaInfo = new ManaDeckInfoDto()
