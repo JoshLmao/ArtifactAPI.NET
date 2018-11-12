@@ -136,10 +136,12 @@
                                                         </DockPanel>
                                                         <StackPanel Margin="5,0" Grid.Column="8" Orientation="Horizontal" VerticalAlignment="Center">
                                                             <Grid Background="{Binding ColorOneBrush, FallbackValue=Orange}" Height="30" Width="30">
-                                                                <TextBlock Text="{Binding ColorOneTotalManaCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ColorOneTotalCardCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="White"/>
                                                             </Grid>
                                                             <Grid Background="{Binding ColorTwoBrush, FallbackValue=Yellow}" Height="30" Width="30" Margin="5,0">
-                                                                <TextBlock Text="{Binding ColorTwoTotalManaCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ColorTwoTotalCardCount, FallbackValue=99}" Margin="5,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="White"/>
                                                             </Grid>
                                                         </StackPanel>
                                                     </Grid>
@@ -161,7 +163,7 @@
                                                 <Image Source="{Binding MiniImage.Default, Converter={StaticResource u2ic}}"
                                                    Width="50" Height="50" DockPanel.Dock="Left"/>
                                                 <!--Card Amount-->
-                                                <TextBlock Text="{Binding Amount, StringFormat=x{0}}" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="5" 
+                                                <TextBlock Text="{Binding Amount, StringFormat=x{0}}" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,5" 
                                                            FontSize="20" Foreground="White"/>
                                                 <!--Card type icon-->
                                                 <Image Width="40" Height="40" Source="{Binding Converter={StaticResource t2ic}}" VerticalAlignment="Center" Margin="1"/>

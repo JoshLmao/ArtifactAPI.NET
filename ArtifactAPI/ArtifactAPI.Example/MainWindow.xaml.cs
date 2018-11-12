@@ -97,6 +97,17 @@ namespace ArtifactAPI.Example
 
                 ColorOneBrush = FactionColorToBrush(colorOne),
                 ColorTwoBrush = FactionColorToBrush(colorTwo),
+                ColorOneTotalCardCount = deck.Cards.Sum(x => x.IsBlack && colorOne == Enums.Colors.Black
+                                                                || x.IsBlue && colorOne == Enums.Colors.Blue
+                                                                || x.IsGreen && colorOne == Enums.Colors.Green
+                                                                || x.IsRed && colorOne == Enums.Colors.Red 
+                                                                ? x.Amount : 0),
+
+                ColorTwoTotalCardCount = deck.Cards.Sum(x => (x.IsBlack && colorTwo == Enums.Colors.Black
+                                                               || x.IsBlue && colorTwo == Enums.Colors.Blue
+                                                               || x.IsGreen && colorTwo == Enums.Colors.Green
+                                                               || x.IsRed && colorTwo == Enums.Colors.Red)
+                                                               ? x.Amount : 0)
             };
             deckManaInfo.MaxManaCardCount = GetMaxMana(deckManaInfo.OneManaCards,
                                                     deckManaInfo.TwoManaCards,
@@ -211,8 +222,8 @@ namespace ArtifactAPI.Example
 
         public int MaxManaCardCount { get; set; }
 
-        public int ColorOneTotalManaCount { get; set; }
-        public int ColorTwoTotalManaCount { get; set; }
+        public int ColorOneTotalCardCount { get; set; }
+        public int ColorTwoTotalCardCount { get; set; }
 
         public SolidColorBrush ColorOneBrush { get; set; }
         public SolidColorBrush ColorTwoBrush { get; set; }
