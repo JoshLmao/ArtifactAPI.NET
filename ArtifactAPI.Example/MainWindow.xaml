@@ -252,7 +252,6 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Deck Builder">
-                
             </TabItem>
         </TabControl>
     </Grid>

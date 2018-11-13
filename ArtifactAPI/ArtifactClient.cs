@@ -1,17 +1,18 @@
-﻿using ArtifactAPI.Encoding;
+﻿using ArtifactAPI.Converters;
+using ArtifactAPI.Encoding;
 using ArtifactAPI.Enums;
 using ArtifactAPI.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArtifactAPI
 {
+    /// <summary>
+    /// The entry client for accessing the Artifact API
+    /// </summary>
     public class ArtifactClient
     {
         const string ROOT_URL = "https://playartifact.com/";
@@ -24,15 +25,6 @@ namespace ArtifactAPI
         public ArtifactClient()
         {
             m_client = new RestClient();
-        }
-
-        private string Request(string baseUrl, string requestUrl)
-        {
-            m_client.BaseUrl = new Uri(baseUrl);
-
-            RestRequest request = new RestRequest(requestUrl);
-            IRestResponse response = m_client.Execute(request);
-            return response.Content;
         }
 
         /// <summary>
@@ -108,7 +100,7 @@ namespace ArtifactAPI
                                 modifiedCards.Remove(g);
                                 SignatureCard sigCard = new SignatureCard()
                                 {
-                                    Amount = 3, //Signature cards always have x3 of theirselves //g.Amount,
+                                    Count = 3, //Signature cards always have x3 of theirselves //g.Amount,
                                     Armor = g.Armor,
                                     AttackDmg = g.AttackDmg,
                                     BaseId = g.BaseId,
@@ -144,16 +136,30 @@ namespace ArtifactAPI
         }
 
         /// <summary>
-        /// Encodes a built deck into a string for sharing
+        /// Encodes a decoded deck into a string for sharing
         /// </summary>
-        /// <param name="deck">The full deck</param>
-        /// <returns>Base8</returns>
+        /// <param name="deck">The decoded deck with hero id's and turns/counts</param>
+        /// <returns></returns>
         public string EncodeDeck(DecodedDeck deck)
         {
             if (deck == null)
                 return null;
 
             return DeckEncoder.Encode(deck);
+        }
+
+        /// <summary>
+        /// Encodes a built deck into a string for sharing
+        /// </summary>
+        /// <param name="deck">The populated deck</param>
+        /// <returns></returns>
+        public string EncodeDeck(Deck deck)
+        {
+            if (deck == null)
+                return null;
+
+            DecodedDeck decoded = new DecodedDeck(deck);
+            return DeckEncoder.Encode(decoded);
         }
 
         /// <summary>
@@ -170,16 +176,16 @@ namespace ArtifactAPI
         }
 
         /// <summary>
-        /// Gets a card from it's id
+        /// Gets a card from a card id
         /// </summary>
-        /// <param name="id">The id of the card</param>
+        /// <param name="cardId">The id of the card</param>
         /// <returns>The card information and stats</returns>
-        public Card GetCard(int id)
+        public Card GetCard(int cardId)
         {
             if (m_loadedCards == null)
                 GetAllCards();
 
-            return m_loadedCards.FirstOrDefault(x => x.Id == id);
+            return m_loadedCards.FirstOrDefault(x => x.Id == cardId);
         }
 
         /// <summary>
@@ -223,7 +229,7 @@ namespace ArtifactAPI
                     continue;
 
                 GenericCard genericCard = card as GenericCard;
-                genericCard.Amount = dCard.Count;
+                genericCard.Count = dCard.Count;
 
                 genericCards.Add(genericCard);
             }
@@ -277,7 +283,19 @@ namespace ArtifactAPI
         public string GetCardArtUrl(string cardName, ArtType artType)
         {
             Card c = m_loadedCards.FirstOrDefault(x => x.Names.English == cardName);
+            if (c == null)
+                return null;
+
             return GetCardArtUrl(c.Id, artType);
+        }
+
+        private string Request(string baseUrl, string requestUrl)
+        {
+            m_client.BaseUrl = new Uri(baseUrl);
+
+            RestRequest request = new RestRequest(requestUrl);
+            IRestResponse response = m_client.Execute(request);
+            return response.Content;
         }
     }
 }
