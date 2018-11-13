@@ -19,7 +19,7 @@ namespace ArtifactAPI.Tests
         public void FindCardById()
         {
             ArtifactClient client = new ArtifactClient();
-            Card card = client.GetCardAsync(10418);
+            Card card = client.GetCard(10418);
 
             Assert.IsNotNull(card);
         }
