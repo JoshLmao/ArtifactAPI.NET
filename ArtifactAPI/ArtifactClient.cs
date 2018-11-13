@@ -14,24 +14,24 @@ namespace ArtifactAPI
 {
     public class ArtifactClient
     {
-        const string BASE_URL = "https://playartifact.com/";
+        const string ROOT_URL = "https://playartifact.com/";
         const string CDN_ROOT_URL = "https://steamcdn-a.akamaihd.net/";
 
         private RestClient m_client = null;
-        private RestClient m_cdnClient = null;
 
         List<Card> m_loadedCards = null;
 
         public ArtifactClient()
         {
-            m_client = new RestClient(BASE_URL);
-            m_cdnClient = new RestClient(CDN_ROOT_URL);
+            m_client = new RestClient();
         }
 
-        private string Request(RestClient client, string requestUrl)
+        private string Request(string baseUrl, string requestUrl)
         {
+            m_client.BaseUrl = new Uri(baseUrl);
+
             RestRequest request = new RestRequest(requestUrl);
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = m_client.Execute(request);
             return response.Content;
         }
 
@@ -54,7 +54,7 @@ namespace ArtifactAPI
         /// <returns></returns>
         public CardSet GetCardSet(string cardSetId)
         {
-            string stageOneContent = Request(m_client, $"/cardset/{cardSetId}");
+            string stageOneContent = Request(ROOT_URL, $"/cardset/{cardSetId}");
             UrlStage stage = null;
             try
             {
@@ -65,7 +65,7 @@ namespace ArtifactAPI
                 Console.WriteLine(e);
             }
 
-            string stageTwoContent = Request(m_cdnClient, stage.URL);
+            string stageTwoContent = Request(CDN_ROOT_URL, stage.URL);
             CardSet cardSet = null;
             try
             {
