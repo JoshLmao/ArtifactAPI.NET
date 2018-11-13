@@ -38,7 +38,18 @@ namespace ArtifactAPI.Encoding
 
             noPrefix = noPrefix.Replace('-', '/');
             noPrefix = noPrefix.Replace('_', '=');
-            byte[] data = Convert.FromBase64String(noPrefix);
+            byte[] data = null;
+            try
+            {
+                data = Convert.FromBase64String(noPrefix);
+            }
+            catch(FormatException ex)
+            {
+                Console.WriteLine($"Can't convert string, could be invalid - {ex.Message}");
+            }
+
+            if (data == null)
+                return null;
 
             string decodedString = System.Text.Encoding.UTF8.GetString(data);
 

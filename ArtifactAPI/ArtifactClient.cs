@@ -7,6 +7,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtifactAPI
 {
@@ -33,9 +34,21 @@ namespace ArtifactAPI
         /// <returns>All cards</returns>
         public List<Card> GetAllCards()
         {
-            m_loadedCards = GetCardSet("00").Set.Cards;
-            List<Card> otherSet = GetCardSet("01").Set.Cards;
-            m_loadedCards.AddRange(otherSet);
+            return Task.Run(() => GetAllCardsAsync()).Result;
+        }
+
+        /// <summary>
+        /// Gets all available cards in Artifact
+        /// </summary>
+        /// <returns>All cards</returns>
+        public async Task<List<Card>> GetAllCardsAsync()
+        {
+            CardSet setZero = await GetCardSetAsync("00");
+            m_loadedCards = setZero.Set.Cards;
+
+            CardSet setOne = await GetCardSetAsync("01");
+            m_loadedCards.AddRange(setOne.Set.Cards);
+
             return m_loadedCards;
         }
 
@@ -46,7 +59,17 @@ namespace ArtifactAPI
         /// <returns></returns>
         public CardSet GetCardSet(string cardSetId)
         {
-            string stageOneContent = Request(ROOT_URL, $"/cardset/{cardSetId}");
+            return Task.Run(() => GetCardSetAsync(cardSetId)).Result;
+        }
+
+        /// <summary>
+        /// Returns all cards of a set asynchronously, the only sets available are "00" and "01"
+        /// </summary>
+        /// <param name="cardSetId"></param>
+        /// <returns></returns>
+        public async Task<CardSet> GetCardSetAsync(string cardSetId)
+        {
+            string stageOneContent = await RequestAsync(ROOT_URL, $"/cardset/{cardSetId}");
             UrlStage stage = null;
             try
             {
@@ -57,22 +80,32 @@ namespace ArtifactAPI
                 Console.WriteLine(e);
             }
 
-            string stageTwoContent = Request(CDN_ROOT_URL, stage.URL);
+            string stageTwoContent = await RequestAsync(CDN_ROOT_URL, stage.URL);
             CardSet cardSet = null;
             try
             {
                 cardSet = JsonConvert.DeserializeObject<CardSet>(stageTwoContent, new CardToSpecificJsonConverter());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine($"Failed to deserialize - {e}");
             }
 
             //Set signature cards after all have been loaded
             //ToDo: Set this at the same stage of deserialize, if possible
-            cardSet.Set.Cards = SetSignatureCards(cardSet.Set.Cards);
+            cardSet.Set.Cards = await SetSignatureCardsAsync(cardSet.Set.Cards);
 
             return cardSet;
+        }
+
+        private async Task<string> RequestAsync(string baseUrl, string requestUrl)
+        {
+            m_client.BaseUrl = new Uri(baseUrl);
+
+            RestRequest request = new RestRequest(requestUrl);
+            System.Threading.CancellationTokenSource cancelToken = new System.Threading.CancellationTokenSource();
+            IRestResponse response = await m_client.ExecuteTaskAsync(request, cancelToken.Token);
+            return response.Content;
         }
 
         /// <summary>
@@ -80,57 +113,60 @@ namespace ArtifactAPI
         /// </summary>
         /// <param name="cardSet"></param>
         /// <returns></returns>
-        private List<Card> SetSignatureCards(List<Card> cardSet)
+        private async Task<List<Card>> SetSignatureCardsAsync(List<Card> cardSet)
         {
             List<Card> modifiedCards = new List<Card>(cardSet);
-            foreach(Card gCard in cardSet)
+            await Task.Run(() =>
             {
-                if(gCard is HeroCard)
+                foreach (Card gCard in cardSet)
                 {
-                    if(gCard.References != null)
+                    if (gCard is HeroCard)
                     {
-                        foreach(Reference r in gCard.References)
+                        if (gCard.References != null)
                         {
-                            if(r.Type.ToLower() == "includes")
+                            foreach (Reference r in gCard.References)
                             {
-                                GenericCard g = (GenericCard)modifiedCards.FirstOrDefault(x => x.Id == r.Id);
-                                if (g == null)
-                                    continue;
-
-                                modifiedCards.Remove(g);
-                                SignatureCard sigCard = new SignatureCard()
+                                if (r.Type.ToLower() == "includes")
                                 {
-                                    Count = 3, //Signature cards always have x3 of theirselves //g.Amount,
-                                    Armor = g.Armor,
-                                    AttackDmg = g.AttackDmg,
-                                    BaseId = g.BaseId,
-                                    GoldCost = g.GoldCost,
-                                    HitPoints = g.HitPoints,
-                                    Id = g.Id,
-                                    Illustrator = g.Illustrator,
-                                    IngameImage = g.IngameImage,
-                                    IsBlack = g.IsBlack,
-                                    IsBlue = g.IsBlue,
-                                    IsGreen = g.IsGreen,
-                                    IsRed = g.IsRed,
-                                    FactionColor = g.FactionColor,
-                                    ItemDef = g.ItemDef,
-                                    LargeImage = g.LargeImage,
-                                    ManaCost = g.ManaCost,
-                                    MiniImage = g.MiniImage,
-                                    Names = g.Names,
-                                    Rarity = g.Rarity,
-                                    References = g.References,
-                                    SubType = g.SubType,
-                                    Text = g.Text,
-                                    Type = g.Type,
-                                };
-                                modifiedCards.Add(sigCard);
+                                    GenericCard g = (GenericCard)modifiedCards.FirstOrDefault(x => x.Id == r.Id);
+                                    if (g == null)
+                                        continue;
+
+                                    modifiedCards.Remove(g);
+                                    SignatureCard sigCard = new SignatureCard()
+                                    {
+                                        Count = 3, //Signature cards always have x3 of theirselves //g.Amount,
+                                        Armor = g.Armor,
+                                        AttackDmg = g.AttackDmg,
+                                        BaseId = g.BaseId,
+                                        GoldCost = g.GoldCost,
+                                        HitPoints = g.HitPoints,
+                                        Id = g.Id,
+                                        Illustrator = g.Illustrator,
+                                        IngameImage = g.IngameImage,
+                                        IsBlack = g.IsBlack,
+                                        IsBlue = g.IsBlue,
+                                        IsGreen = g.IsGreen,
+                                        IsRed = g.IsRed,
+                                        FactionColor = g.FactionColor,
+                                        ItemDef = g.ItemDef,
+                                        LargeImage = g.LargeImage,
+                                        ManaCost = g.ManaCost,
+                                        MiniImage = g.MiniImage,
+                                        Names = g.Names,
+                                        Rarity = g.Rarity,
+                                        References = g.References,
+                                        SubType = g.SubType,
+                                        Text = g.Text,
+                                        Type = g.Type,
+                                    };
+                                    modifiedCards.Add(sigCard);
+                                }
                             }
                         }
                     }
                 }
-            }
+            });
 
             return modifiedCards;
         }
@@ -182,8 +218,18 @@ namespace ArtifactAPI
         /// <returns>The card information and stats</returns>
         public Card GetCard(int cardId)
         {
+            return Task.Run(() => GetCardAsync(cardId)).Result;
+        }
+
+        /// <summary>
+        /// Gets a card from a card id
+        /// </summary>
+        /// <param name="cardId">The id of the card</param>
+        /// <returns>The card information and stats</returns>
+        public async Task<Card> GetCardAsync(int cardId)
+        {
             if (m_loadedCards == null)
-                GetAllCards();
+                await GetAllCardsAsync();
 
             return m_loadedCards.FirstOrDefault(x => x.Id == cardId);
         }
@@ -195,6 +241,16 @@ namespace ArtifactAPI
         /// <returns>A complete deck with cards and their info</returns>
         public Deck GetCardsFromDecodedDeck(DecodedDeck decodedDeck)
         {
+            return Task.Run(() => GetCardsFromDecodedDeckAsync(decodedDeck)).Result;
+        }
+
+        /// <summary>
+        /// Converts a DecodedDeck to return a complete deck with all stats
+        /// </summary>
+        /// <param name="decodedDeck">A DecodedDeck</param>
+        /// <returns>A complete deck with cards and their info</returns>
+        public async Task<Deck> GetCardsFromDecodedDeckAsync(DecodedDeck decodedDeck)
+        {
             if (decodedDeck == null)
                 return null;
 
@@ -202,7 +258,7 @@ namespace ArtifactAPI
             List<GenericCard> genericCards = new List<GenericCard>();
             foreach(DecodedHero dHero in decodedDeck.Heroes)
             {
-                Card card = GetCard(dHero.Id);
+                Card card = await GetCardAsync(dHero.Id);
                 if (card == null || !(card is HeroCard))
                     continue;
 
@@ -213,7 +269,7 @@ namespace ArtifactAPI
                 {
                     foreach (Reference referenceCard in heroCard.References)
                     {
-                        Card refCard = GetCard(referenceCard.Id);
+                        Card refCard = await GetCardAsync(referenceCard.Id);
                         if (refCard is SignatureCard)
                             genericCards.Add((SignatureCard)refCard);
                     }
@@ -224,7 +280,7 @@ namespace ArtifactAPI
 
             foreach(DecodedCard dCard in decodedDeck.Cards)
             {
-                Card card = GetCard(dCard.Id);
+                Card card = await GetCardAsync(dCard.Id);
                 if (card == null || !(card is GenericCard))
                     continue;
 
@@ -252,8 +308,19 @@ namespace ArtifactAPI
         /// <returns>The url of the image</returns>
         public string GetCardArtUrl(int cardId, ArtType artType)
         {
+            return Task.Run(() => GetCardArtUrl(cardId, artType)).Result;
+        }
+
+        /// <summary>
+        /// Returns the url of the art required from the card's id
+        /// </summary>
+        /// <param name="cardId">The number id of the card to get art for</param>
+        /// <param name="artType">The type of art needed</param>
+        /// <returns>The url of the image</returns>
+        public async Task<string> GetCardArtUrlAsync(int cardId, ArtType artType)
+        {
             if (m_loadedCards == null)
-                GetAllCards();
+                await GetAllCardsAsync();
 
             Card card = m_loadedCards.FirstOrDefault(x => x.Id == cardId);
             if (card == null)
@@ -282,11 +349,22 @@ namespace ArtifactAPI
         /// <returns>The url of the image</returns>
         public string GetCardArtUrl(string cardName, ArtType artType)
         {
+            return Task.Run(() => GetCardArtUrlAsync(cardName, artType)).Result;
+        }
+
+        /// <summary>
+        /// Returns the url of the art required from the card name
+        /// </summary>
+        /// <param name="cardName">The name of the card (in English)</param>
+        /// <param name="artType">The type of art needed</param>
+        /// <returns>The url of the image</returns>
+        public async Task<string> GetCardArtUrlAsync(string cardName, ArtType artType)
+        {
             Card c = m_loadedCards.FirstOrDefault(x => x.Names.English == cardName);
             if (c == null)
                 return null;
 
-            return GetCardArtUrl(c.Id, artType);
+            return await GetCardArtUrlAsync(c.Id, artType);
         }
 
         private string Request(string baseUrl, string requestUrl)

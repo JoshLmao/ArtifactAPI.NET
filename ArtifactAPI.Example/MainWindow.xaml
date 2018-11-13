@@ -41,6 +41,13 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                            <Grid Name="g_Loading" Grid.ColumnSpan="3" Panel.ZIndex="10">
+                                <Grid.Background>
+                                    <SolidColorBrush Color="Gray" Opacity="0.75"/>
+                                </Grid.Background>
+                                <TextBlock Text="Loading..." FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                            
                             <StackPanel Grid.Column="1">
                                 <!--Deck Name-->
                                 <StackPanel Background="Gray">

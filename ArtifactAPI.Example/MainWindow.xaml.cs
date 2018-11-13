@@ -36,9 +36,10 @@ namespace ArtifactAPI.Example
         private void OnViewLoaded(object sender, RoutedEventArgs e)
         {
             m_client = new ArtifactClient();
+            g_Loading.Visibility = Visibility.Collapsed;
         }
 
-        private void OnDeckCodeChanged(object sender, TextChangedEventArgs e)
+        private async void OnDeckCodeChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tb = sender as TextBox;
             if (tb == null)
@@ -52,8 +53,10 @@ namespace ArtifactAPI.Example
                 return;
             }
 
-            //Reset image sources if not null
-            if(img_HeroOne.Source != null)
+            g_Loading.Visibility = Visibility.Visible;
+
+            /*Reset all UI holder*/
+            if (img_HeroOne.Source != null)
                 img_HeroOne.Source = null;
             if (img_HeroTwo.Source != null)
                 img_HeroTwo.Source = null;
@@ -64,11 +67,23 @@ namespace ArtifactAPI.Example
             if (img_HeroFive.Source != null)
                 img_HeroFive.Source = null;
 
+            SetFocusedCard(null);
+            t_totalCards.Text = null;
+            t_totalItems.Text = null;
+            t_TCSpell.Text = null;
+            t_TCCreep.Text = null;
+            t_TCImprovement.Text = null;
+            t_TIarmor.Text = null;
+            t_TIweapon.Text =null;
+            t_TIhealth.Text = null;
+            t_TIconsumable.Text = null;
+            /*End of resetting UI holders*/
+
             //Set the deck name title
             tb_DeckName.Text = decodedDeck.Name;
 
             //Decode the deck to the complete deck
-            Deck deck = m_client.GetCardsFromDecodedDeck(decodedDeck);
+            Deck deck = await m_client.GetCardsFromDecodedDeckAsync(decodedDeck);
 
             //Populate the hero UI
             List<System.Windows.Controls.Image> heroImageHolders = new List<System.Windows.Controls.Image>()
@@ -139,6 +154,8 @@ namespace ArtifactAPI.Example
             t_TIweapon.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Weapon ? x.Count : 0).ToString();
             t_TIhealth.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Accessory ? x.Count : 0).ToString();
             t_TIconsumable.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Consumable ? x.Count : 0).ToString();
+
+            g_Loading.Visibility = Visibility.Collapsed;
         }
 
         private int GetManaAmount(List<GenericCard> cards, int manaCostAmount)
@@ -206,6 +223,11 @@ namespace ArtifactAPI.Example
                 return;
 
             string artUrl = m_client.GetCardArtUrl(gCard.Id, ArtType.Large);
+            SetFocusedCard(artUrl);
+        }
+
+        private void SetFocusedCard(string artUrl)
+        {
             img_lastClickedCard.Source = GetImageFromUrl(artUrl);
         }
 
