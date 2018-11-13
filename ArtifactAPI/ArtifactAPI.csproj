@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArtifactClient.cs" />
-    <Compile Include="CardToSpecificJsonConverter.cs" />
+    <Compile Include="Converters\CardToSpecificJsonConverter.cs" />
     <Compile Include="Encoding\DeckDecoder.cs" />
     <Compile Include="Encoding\DeckEncoder.cs" />
     <Compile Include="Encoding\Helper.cs" />
