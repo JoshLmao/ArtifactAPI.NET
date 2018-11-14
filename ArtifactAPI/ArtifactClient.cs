@@ -235,6 +235,29 @@ namespace ArtifactAPI
         }
 
         /// <summary>
+        /// Gets a card from the card name
+        /// </summary>
+        /// <param name="cardName">The English name of the card, casing is ignored</param>
+        /// <returns></returns>
+        public Card GetCard(string cardName)
+        {
+            return Task.Run(() => GetCardAsync(cardName)).Result;
+        }
+
+        /// <summary>
+        /// Gets a card from the card name
+        /// </summary>
+        /// <param name="cardName">The English name of the card, casing is ignored</param>
+        /// <returns></returns>
+        public async Task<Card> GetCardAsync(string cardName)
+        {
+            if (m_loadedCards == null)
+                await GetAllCardsAsync();
+
+            return m_loadedCards.FirstOrDefault(x => x.Names.English.ToLower() == cardName.ToLower());
+        }
+
+        /// <summary>
         /// Converts a DecodedDeck to return a complete deck with all stats
         /// </summary>
         /// <param name="decodedDeck">A DecodedDeck</param>
@@ -308,7 +331,7 @@ namespace ArtifactAPI
         /// <returns>The url of the image</returns>
         public string GetCardArtUrl(int cardId, ArtType artType)
         {
-            return Task.Run(() => GetCardArtUrl(cardId, artType)).Result;
+            return Task.Run(() => GetCardArtUrlAsync(cardId, artType)).Result;
         }
 
         /// <summary>
