@@ -122,11 +122,12 @@ namespace ArtifactAPI
                 {
                     if (gCard is HeroCard)
                     {
+                        HeroCard heroCard = gCard as HeroCard;
                         if (gCard.References != null)
                         {
                             foreach (Reference r in gCard.References)
                             {
-                                if (r.Type.ToLower() == "includes")
+                                if (r.Type == ReferenceType.Included)
                                 {
                                     GenericCard g = (GenericCard)modifiedCards.FirstOrDefault(x => x.Id == r.Id);
                                     if (g == null)
@@ -135,6 +136,8 @@ namespace ArtifactAPI
                                     modifiedCards.Remove(g);
                                     SignatureCard sigCard = new SignatureCard()
                                     {
+                                        HeroId = gCard.Id, //Set the parent card id of the signature card
+
                                         Count = 3, //Signature cards always have x3 of theirselves //g.Amount,
                                         Armor = g.Armor,
                                         AttackDmg = g.AttackDmg,
@@ -160,6 +163,7 @@ namespace ArtifactAPI
                                         Text = g.Text,
                                         Type = g.Type,
                                     };
+
                                     modifiedCards.Add(sigCard);
                                 }
                             }

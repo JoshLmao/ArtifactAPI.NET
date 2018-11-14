@@ -56,6 +56,7 @@
     <Compile Include="Encoding\Helper.cs" />
     <Compile Include="Enums\ArtType.cs" />
     <Compile Include="Enums\Colors.cs" />
+    <Compile Include="Enums\RefType.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Enums\CardType.cs" />
     <Compile Include="Models\Deck.cs" />

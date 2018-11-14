@@ -172,7 +172,7 @@ namespace ArtifactAPI.Example
             return card.FactionColor;
         }
 
-        private SolidColorBrush FactionColorToBrush(Enums.CardColor cardColor)
+        private SolidColorBrush FactionColorToBrush(CardColor cardColor)
         {
             Converters.CardColorToBrushConverter converter = new Converters.CardColorToBrushConverter();
             return converter.Convert(cardColor, null, null, null) as SolidColorBrush;

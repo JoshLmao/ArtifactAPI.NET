@@ -117,7 +117,7 @@ namespace ArtifactAPI.Models
             set
             {
                 m_isBlack = value;
-                FactionColor = Enums.CardColor.Black;
+                FactionColor = CardColor.Black;
             }
         }
 
@@ -129,7 +129,7 @@ namespace ArtifactAPI.Models
             set
             {
                 m_isGreen = value;
-                FactionColor = Enums.CardColor.Green;
+                FactionColor = CardColor.Green;
             }
         }
 
@@ -141,7 +141,7 @@ namespace ArtifactAPI.Models
             set
             {
                 m_isRed = value;
-                FactionColor = Enums.CardColor.Red;
+                FactionColor = CardColor.Red;
             }
         }
 
@@ -153,7 +153,7 @@ namespace ArtifactAPI.Models
             set
             {
                 m_isBlue = value;
-                FactionColor = Enums.CardColor.Blue;
+                FactionColor = CardColor.Blue;
             }
         }
 
@@ -161,15 +161,21 @@ namespace ArtifactAPI.Models
         /// List of card id's that relate to this card. For example, their active/passive abilities, etc
         /// </summary>
         [JsonProperty("references")]
-        public List<Reference> References { get; set; }
+        public virtual List<Reference> References { get; set; }
     }
 
     public class Reference
     {
+        /// <summary>
+        /// The Id of the reference type
+        /// </summary>
         [JsonProperty("card_id")]
         public int Id { get; set; }
 
+        /// <summary>
+        /// Defines the type of the "Id" variable
+        /// </summary>
         [JsonProperty("ref_type")]
-        public string Type { get; set; }
+        public ReferenceType Type { get; set; }
     }
 }
