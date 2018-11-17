@@ -32,10 +32,4 @@ namespace ArtifactAPI.Models
         [JsonProperty("name")]
         public Languages Names { get; set; }
     }
-
-    public class Languages
-    {
-        [JsonProperty("english")]
-        public string English { get; set; }
-    }
 }
