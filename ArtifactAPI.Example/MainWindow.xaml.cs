@@ -3,17 +3,12 @@ using ArtifactAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ArtifactAPI.Example
 {
@@ -24,19 +19,31 @@ namespace ArtifactAPI.Example
     {
         private ArtifactClient m_client;
 
+        public Language SetLanguage { get { return m_currentLanguage; } }
+
+        private Language m_currentLanguage = Enums.Language.English;
+
         public MainWindow()
         {
             InitializeComponent();
 
             c_exampleWindow.Loaded += OnViewLoaded;
             tb_DeckCode.TextChanged += OnDeckCodeChanged;
-            
+            c_exampleWindow.DataContext = this;
         }
 
         private void OnViewLoaded(object sender, RoutedEventArgs e)
         {
             m_client = new ArtifactClient();
             g_Loading.Visibility = Visibility.Collapsed;
+
+            //Add all languages to Language ComboBox
+            var allLanguages = Enum.GetValues(typeof(Language));
+            foreach(Language language in allLanguages)
+                cb_language.Items.Add(language);
+
+            cb_language.SelectedIndex = 0;
+            m_currentLanguage = (Language)allLanguages.GetValue(0);
         }
 
         private async void OnDeckCodeChanged(object sender, TextChangedEventArgs e)
@@ -45,8 +52,18 @@ namespace ArtifactAPI.Example
             if (tb == null)
                 return;
 
+            await Update(tb.Text);
+        }
+
+        /// <summary>
+        /// Updated the whole UI using a deck code
+        /// </summary>
+        /// <param name="deckCode"></param>
+        /// <returns></returns>
+        private async Task Update(string deckCode)
+        {
             //Decode the string into a deck. See if it's valid
-            DecodedDeck decodedDeck = m_client.DecodeDeck(tb.Text);
+            DecodedDeck decodedDeck = m_client.DecodeDeck(deckCode);
             if (decodedDeck == null)
             {
                 Console.WriteLine("Unable to get deck. DeckCode is invald");
@@ -67,14 +84,14 @@ namespace ArtifactAPI.Example
             if (img_HeroFive.Source != null)
                 img_HeroFive.Source = null;
 
-            SetFocusedCard(null);
+            SetFocusedCard(-1, ArtType.Ingame, Enums.Language.English);
             t_totalCards.Text = null;
             t_totalItems.Text = null;
             t_TCSpell.Text = null;
             t_TCCreep.Text = null;
             t_TCImprovement.Text = null;
             t_TIarmor.Text = null;
-            t_TIweapon.Text =null;
+            t_TIweapon.Text = null;
             t_TIhealth.Text = null;
             t_TIconsumable.Text = null;
             /*End of resetting UI holders*/
@@ -109,7 +126,7 @@ namespace ArtifactAPI.Example
             //Sort cards by mana cost & set UI
             List<GenericCard> sortedList = deck.Cards.OrderBy(x => x.ManaCost).ToList();
             ic_genericCardsList.ItemsSource = sortedList;
-            
+
             //Total cards excludes items, hence the separate total items UI
             int totalGeneric = deck.Cards.Sum(x => x is GenericCard && x.Type == CardType.Item ? ((GenericCard)x).Count : 0);
             t_totalCards.Text = $"{totalGeneric} CARDS";
@@ -148,7 +165,7 @@ namespace ArtifactAPI.Example
             //Set relevant stat information for deck
             t_TCSpell.Text = deck.Cards.Sum(x => x.Type == CardType.Spell ? x.Count : 0).ToString();
             t_TCCreep.Text = deck.Cards.Sum(x => x.Type == CardType.Creep ? x.Count : 0).ToString();
-            t_TCImprovement.Text = deck.Cards.Sum(x => (x.Type == CardType.Improvement/* == CardSubtypes.Improvement*/) ? x.Count : 0).ToString();
+            t_TCImprovement.Text = deck.Cards.Sum(x => (x.Type == CardType.Improvement) ? x.Count : 0).ToString();
 
             t_TIarmor.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Armor ? x.Count : 0).ToString();
             t_TIweapon.Text = deck.Cards.Sum(x => x.Type == CardType.Item && x.SubType == CardType.Weapon ? x.Count : 0).ToString();
@@ -212,7 +229,7 @@ namespace ArtifactAPI.Example
             System.Diagnostics.Process.Start(urlPrefix + deckCode);
         }
 
-        private void OnClickedCard(object sender, MouseButtonEventArgs e)
+        private async void OnClickedCard(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement conv = sender as FrameworkElement;
             if (conv == null)
@@ -222,17 +239,33 @@ namespace ArtifactAPI.Example
             if (gCard == null)
                 return;
 
-            string artUrl = m_client.GetCardArtUrl(gCard.Id, ArtType.Large);
-            SetFocusedCard(artUrl);
+            await SetFocusedCard(gCard.Id, ArtType.Large, m_currentLanguage);
         }
 
-        private void SetFocusedCard(string artUrl)
+        private async Task SetFocusedCard(int cardId, ArtType artType, Language language)
         {
-            img_lastClickedCard.Source = GetImageFromUrl(artUrl);
+            string artUrl = await m_client.GetCardArtUrlAsync(cardId, artType, language);
+            if (string.IsNullOrEmpty(artUrl))
+            {
+                img_lastClickedCard.Source = null;
+            }
+            else
+            {
+                img_lastClickedCard.Source = GetImageFromUrl(artUrl);
+            }
         }
 
         private void OnMouseEnterHyperlink(object sender, MouseEventArgs e) { Mouse.OverrideCursor = Cursors.Hand; }
         private void OnMouseLeaveHyperlink(object sender, MouseEventArgs e) { Mouse.OverrideCursor = null; }
+
+        private async void OnLanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int newIndex = (sender as ComboBox).SelectedIndex;
+            m_currentLanguage = (Language)newIndex;
+            await Update(tb_DeckCode.Text);
+
+            //ToDo: reselect card with new selected language
+        }
     }
 
     public class ManaDeckInfoDto

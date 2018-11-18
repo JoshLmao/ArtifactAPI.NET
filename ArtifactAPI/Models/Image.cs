@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using ArtifactAPI.Enums;
+using Newtonsoft.Json;
+using System;
 
 namespace ArtifactAPI.Models
 {
@@ -26,10 +28,10 @@ namespace ArtifactAPI.Models
         public string Spanish { get; set; }
 
         [JsonProperty("schinese")]
-        public string StandardChinese { get; set; }
+        public string ChineseSimplified { get; set; }
 
         [JsonProperty("tchinese")]
-        public string TraditionalChinese { get; set; }
+        public string ChineseTraditional { get; set; }
 
         [JsonProperty("russian")]
         public string Russian { get; set; }
@@ -42,5 +44,43 @@ namespace ArtifactAPI.Models
 
         [JsonProperty("latam")]
         public string Latam { get; set; }
+
+        /// <summary>
+        /// Gets the relevant url from the language enum
+        /// </summary>
+        /// <param name="language">The wanted language</param>
+        /// <returns></returns>
+        public string GetUrl(Language language)
+        {
+            switch (language)
+            {
+                case Language.English:
+                    return Default;
+                case Language.German:
+                    return German;
+                case Language.French:
+                    return French;
+                case Language.Italian:
+                    return Italian;
+                case Language.Korean:
+                    return Korean;
+                case Language.Spanish:
+                    return Spanish;
+                case Language.ChineseSimplified:
+                    return ChineseSimplified;
+                case Language.ChineseTraditional:
+                    return ChineseTraditional;
+                case Language.Russian:
+                    return Russian;
+                case Language.Japanese:
+                    return Japanese;
+                case Language.Brazilian:
+                    return Brazilian;
+                case Language.Latam:
+                    return Latam;
+                default:
+                    throw new NotImplementedException("Not able to get language type");
+            }
+        }
     }
 }

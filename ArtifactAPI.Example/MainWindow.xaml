@@ -15,6 +15,7 @@
         <converters:TypeToIconConverter x:Key="t2ic"/>
         <converters:DisplayCostByTypeConverter x:Key="dcbtc"/>
         <converters:IsSignatureCardConverter x:Key="iscc"/>
+        <converters:LanguageConverter x:Key="lc"/>
     </Window.Resources>
     <Grid>
         <TabControl>
@@ -30,8 +31,18 @@
                             <TextBlock Text="Insert Deck Code:" DockPanel.Dock="Left" Margin="5,3"/>
                             <TextBox Name="tb_DeckCode" HorizontalAlignment="Stretch" Margin="5,0"/>
                         </DockPanel>
-                        <TextBlock HorizontalAlignment="Center" Text="View On PlayArtifact.com"  TextDecorations="underline" Foreground="Blue" Margin="5,3"
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Center" Text="View On PlayArtifact.com"  TextDecorations="underline" Foreground="Blue" Margin="5,3" VerticalAlignment="Center"
                                    MouseDown="OnOpenOnWebsite" MouseEnter="OnMouseEnterHyperlink" MouseLeave="OnMouseLeaveHyperlink"/>
+
+                            <StackPanel  HorizontalAlignment="Left" Margin="5,3" Orientation="Horizontal">
+                                <TextBlock Text="Language:" Margin="4,0" VerticalAlignment="Center"/>
+                                <ComboBox Name="cb_language" SelectionChanged="OnLanguageSelectionChanged" Width="150" >
+
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                        
                     </StackPanel>
                     <!--Row 1-->
                     <ScrollViewer Grid.Row="1">
@@ -41,7 +52,7 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid Name="g_Loading" Grid.ColumnSpan="3" Panel.ZIndex="10">
+                            <Grid Name="g_Loading" Grid.ColumnSpan="3" Panel.ZIndex="10" Visibility="Collapsed">
                                 <Grid.Background>
                                     <SolidColorBrush Color="Gray" Opacity="0.75"/>
                                 </Grid.Background>
@@ -241,7 +252,15 @@
                                                            Width="18"/>
                                                 <StackPanel VerticalAlignment="Center" Margin="10,0">
                                                     <!--Card name-->
-                                                    <TextBlock Text="{Binding Names.English}" FontSize="15" Foreground="White"/>
+                                                    <TextBlock FontSize="15" Foreground="White">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource lc}">
+                                                                <Binding Path="Names"/>
+                                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}"/>
+                                                                <!--{Binding Path=DataContext.UserId, RelativeSource={RelativeSource AncestorType=ItemsControl}}-->
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <!--Signature Card-->
                                                     <TextBlock Text="Signature Card" Foreground="Pink" Visibility="{Binding Converter={StaticResource iscc}}"/>
                                                 </StackPanel>

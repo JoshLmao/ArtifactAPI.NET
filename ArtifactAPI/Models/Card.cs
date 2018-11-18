@@ -162,6 +162,28 @@ namespace ArtifactAPI.Models
         /// </summary>
         [JsonProperty("references")]
         public virtual List<Reference> References { get; set; }
+
+        #region Methods
+        /// <summary>
+        /// Gets the releated image of the art type
+        /// </summary>
+        /// <param name="type">The type of art</param>
+        /// <returns></returns>
+        public Image GetArtType(ArtType type)
+        {
+            switch (type)
+            {
+                case ArtType.Ingame:
+                    return IngameImage;
+                case ArtType.Large:
+                    return LargeImage;
+                case ArtType.Mini:
+                    return MiniImage;
+                default:
+                    throw new NotImplementedException("Missing art type");
+            }
+        }
+        #endregion
     }
 
     public class Reference

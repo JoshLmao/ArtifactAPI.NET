@@ -332,10 +332,11 @@ namespace ArtifactAPI
         /// </summary>
         /// <param name="cardId">The number id of the card to get art for</param>
         /// <param name="artType">The type of art needed</param>
+        /// <param name="language">The language of the image to get</param>
         /// <returns>The url of the image</returns>
-        public string GetCardArtUrl(int cardId, ArtType artType)
+        public string GetCardArtUrl(int cardId, ArtType artType, Language language = Language.English)
         {
-            return Task.Run(() => GetCardArtUrlAsync(cardId, artType)).Result;
+            return Task.Run(() => GetCardArtUrlAsync(cardId, artType, language)).Result;
         }
 
         /// <summary>
@@ -343,8 +344,9 @@ namespace ArtifactAPI
         /// </summary>
         /// <param name="cardId">The number id of the card to get art for</param>
         /// <param name="artType">The type of art needed</param>
+        /// <param name="language">The language of the image to get</param>
         /// <returns>The url of the image</returns>
-        public async Task<string> GetCardArtUrlAsync(int cardId, ArtType artType)
+        public async Task<string> GetCardArtUrlAsync(int cardId, ArtType artType, Language language = Language.English)
         {
             if (m_loadedCards == null)
                 await GetAllCardsAsync();
@@ -353,19 +355,7 @@ namespace ArtifactAPI
             if (card == null)
                 return null;
 
-            switch (artType)
-            {
-                case ArtType.Sprite:
-                    return card.IngameImage.Default;
-                case ArtType.Mini:
-                    return card.MiniImage.Default;
-                case ArtType.Large:
-                    return card.LargeImage.Default;
-                case ArtType.Ingame:
-                    return card.IngameImage.Default;
-                default:
-                    return null;
-            }
+            return card.GetArtType(artType).GetUrl(language);
         }
 
         /// <summary>
@@ -373,10 +363,11 @@ namespace ArtifactAPI
         /// </summary>
         /// <param name="cardName">The name of the card (in English)</param>
         /// <param name="artType">The type of art needed</param>
+        /// <param name="language">The language of the image to get</param>
         /// <returns>The url of the image</returns>
-        public string GetCardArtUrl(string cardName, ArtType artType)
+        public string GetCardArtUrl(string cardName, ArtType artType, Language language = Language.English)
         {
-            return Task.Run(() => GetCardArtUrlAsync(cardName, artType)).Result;
+            return Task.Run(() => GetCardArtUrlAsync(cardName, artType, language)).Result;
         }
 
         /// <summary>
@@ -384,8 +375,9 @@ namespace ArtifactAPI
         /// </summary>
         /// <param name="cardName">The name of the card (in English)</param>
         /// <param name="artType">The type of art needed</param>
+        /// <param name="language">The language of the image to get</param>
         /// <returns>The url of the image</returns>
-        public async Task<string> GetCardArtUrlAsync(string cardName, ArtType artType)
+        public async Task<string> GetCardArtUrlAsync(string cardName, ArtType artType, Language language = Language.English)
         {
             Card c = m_loadedCards.FirstOrDefault(x => x.Names.English == cardName);
             if (c == null)
