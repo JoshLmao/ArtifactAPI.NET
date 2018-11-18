@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/badge/documentation-wip-darkred.svg?style=flat-square.svg"/>
   </a>
   <a href="https://github.com/JoshLmao/ArtifactAPI.NET/releases">
-    <img src="https://img.shields.io/badge/release-v0.1.0-brightgreen.svg?style=flat-square.svg"/>
+    <img src="https://img.shields.io/badge/release-v0.1.01-brightgreen.svg?style=flat-square.svg"/>
   </a>
 </p>
 
