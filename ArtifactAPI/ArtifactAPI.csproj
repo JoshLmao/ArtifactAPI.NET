@@ -66,6 +66,7 @@
     <Compile Include="Models\HeroCard.cs" />
     <Compile Include="Models\Image.cs" />
     <Compile Include="Enums\Rarity.cs" />
+    <Compile Include="Models\Languages.cs" />
     <Compile Include="Models\SignatureCard.cs" />
     <Compile Include="Models\UrlStage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
