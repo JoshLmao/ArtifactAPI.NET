@@ -1,6 +1,6 @@
 <p align="center">
   <a href="">
-    <img width=400 src="/repo_assets/artifactapiNETLogo.png">
+    <img width=400 src="/docs/assets/images/artifactapiNETLogo.png">
   </a>
   
   <br/>
@@ -26,7 +26,7 @@ For further information about how the repo works, check out [some of Valve's cur
 The repo contains an example solution "ArtifactAPI.Example". For more info, [check out the wiki page](https://github.com/JoshLmao/ArtifactAPI.NET/wiki/ArtifactAPI-Example)
 
 <p align="center">
-  <img width=400 src="/repo_assets/exampleProject_preview.png">
+  <img width=400 src="/docs/assets/images/deckViewerImg.png">
 </p>
 
 ## License & Contributions

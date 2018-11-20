@@ -6,9 +6,15 @@ Welcome to the Artifact .NET API!
 
 Check out the relevant pages below
 
-*   [F.A.Q](./pages/faq.md)
-*   [Arifact Client](./pages/artifact_client.md).
-*   [Examples](./pages/example.md)
+### General
+
+*   [Quick Start]({{ '/pages/quick_start' | relative_url }})
+*   [F.A.Q]({{ '/pages/faq' | relative_url }})
+*   [Examples]({{ '/pages/examples' | relative_url }})
+
+### Classes
+
+*   [Artifact Client]({{ '/pages/artifact_client' | relative_url }})
 
 # About
 
@@ -16,8 +22,8 @@ This API's purpose is to provide access to Valve's Artifact API and allows you t
 
 # Installation
 
-*   Download the latest release from the [Release]() page
-*   Download the latest NuGet Package release **(Not available yet!)**
+*   Releases from the [Release](https://github.com/JoshLmao/ArtifactAPI.NET) page
+*   NuGet Package release **(Not available yet!)**
 
 # Features Projects
 

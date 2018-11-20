@@ -11,6 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtifactAPI.Example", "Arti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3C891BAE-D81D-4B35-A8BB-6B67B482DA49}"
 	ProjectSection(SolutionItems) = preProject
+		docs\_config.yml = docs\_config.yml
 		docs\index.md = docs\index.md
 	EndProjectSection
 EndProject
@@ -63,6 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fonts", "fonts", "{3D517B36
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{57786B1F-02C0-4333-8307-CD8C58C8976F}"
 	ProjectSection(SolutionItems) = preProject
+		docs\assets\images\artifactapiNETLogo.png = docs\assets\images\artifactapiNETLogo.png
 		docs\assets\images\bullet.png = docs\assets\images\bullet.png
 		docs\assets\images\hr.gif = docs\assets\images\hr.gif
 		docs\assets\images\nav-bg.gif = docs\assets\images\nav-bg.gif
@@ -84,6 +86,29 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pages", "pages", "{CA9C5601-837B-47E1-BF7F-9938977278C8}"
 	ProjectSection(SolutionItems) = preProject
 		docs\pages\artifact_client.md = docs\pages\artifact_client.md
+		docs\pages\examples.md = docs\pages\examples.md
+		docs\pages\faq.md = docs\pages\faq.md
+		docs\pages\quick_start.md = docs\pages\quick_start.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_layouts", "_layouts", "{510597B1-7C17-467C-88E7-18639C1AED29}"
+	ProjectSection(SolutionItems) = preProject
+		docs\_layouts\default.html = docs\_layouts\default.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{62F23D85-36B5-462A-8884-BBD08BA000E9}"
+	ProjectSection(SolutionItems) = preProject
+		docs\.github\CODEOWNERS = docs\.github\CODEOWNERS
+		docs\.github\config.yml = docs\.github\config.yml
+		docs\.github\no-response.yml = docs\.github\no-response.yml
+		docs\.github\settings.yml = docs\.github\settings.yml
+		docs\.github\stale.yml = docs\.github\stale.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BD8C97FD-8643-45EC-805F-09ECF0224F96}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
@@ -116,6 +141,8 @@ Global
 		{37318BFD-0AC6-41C9-BD77-64DA565BFCDE} = {8334804A-AD45-436B-B210-2DFC18C02FA6}
 		{2EB3E062-059B-473C-B15B-5D9A72B6485A} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
 		{CA9C5601-837B-47E1-BF7F-9938977278C8} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
+		{510597B1-7C17-467C-88E7-18639C1AED29} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
+		{62F23D85-36B5-462A-8884-BBD08BA000E9} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99F8C114-3730-4601-962A-8C7A99D87D9F}
