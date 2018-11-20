@@ -11,7 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtifactAPI.Example", "Arti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3C891BAE-D81D-4B35-A8BB-6B67B482DA49}"
 	ProjectSection(SolutionItems) = preProject
-		artifact_client.md = artifact_client.md
 		docs\index.md = docs\index.md
 	EndProjectSection
 EndProject
@@ -82,6 +81,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_sass", "_sass", "{2EB3E062
 		docs\_sass\rouge-base16-dark.scss = docs\_sass\rouge-base16-dark.scss
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pages", "pages", "{CA9C5601-837B-47E1-BF7F-9938977278C8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\pages\artifact_client.md = docs\pages\artifact_client.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +115,7 @@ Global
 		{57786B1F-02C0-4333-8307-CD8C58C8976F} = {8334804A-AD45-436B-B210-2DFC18C02FA6}
 		{37318BFD-0AC6-41C9-BD77-64DA565BFCDE} = {8334804A-AD45-436B-B210-2DFC18C02FA6}
 		{2EB3E062-059B-473C-B15B-5D9A72B6485A} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
+		{CA9C5601-837B-47E1-BF7F-9938977278C8} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99F8C114-3730-4601-962A-8C7A99D87D9F}
