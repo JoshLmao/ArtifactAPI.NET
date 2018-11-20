@@ -9,6 +9,79 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtifactAPI.Tests", "Artifa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtifactAPI.Example", "ArtifactAPI.Example\ArtifactAPI.Example.csproj", "{D39D1433-E6AF-4FB1-BD34-7EB063450EDE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3C891BAE-D81D-4B35-A8BB-6B67B482DA49}"
+	ProjectSection(SolutionItems) = preProject
+		artifact_client.md = artifact_client.md
+		docs\index.md = docs\index.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{8334804A-AD45-436B-B210-2DFC18C02FA6}"
+	ProjectSection(SolutionItems) = preProject
+		docs\jekyll-theme-midnight.gemspec = docs\jekyll-theme-midnight.gemspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "css", "css", "{6C442953-D674-4A29-85BD-61F725FEE433}"
+	ProjectSection(SolutionItems) = preProject
+		docs\assets\css\ie.scss = docs\assets\css\ie.scss
+		docs\assets\css\style.scss = docs\assets\css\style.scss
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fonts", "fonts", "{3D517B36-F851-4170-B992-98D242251927}"
+	ProjectSection(SolutionItems) = preProject
+		docs\assets\fonts\OpenSans-Bold-webfont.eot = docs\assets\fonts\OpenSans-Bold-webfont.eot
+		docs\assets\fonts\OpenSans-Bold-webfont.svg = docs\assets\fonts\OpenSans-Bold-webfont.svg
+		docs\assets\fonts\OpenSans-Bold-webfont.ttf = docs\assets\fonts\OpenSans-Bold-webfont.ttf
+		docs\assets\fonts\OpenSans-Bold-webfont.woff = docs\assets\fonts\OpenSans-Bold-webfont.woff
+		docs\assets\fonts\OpenSans-BoldItalic-webfont.eot = docs\assets\fonts\OpenSans-BoldItalic-webfont.eot
+		docs\assets\fonts\OpenSans-BoldItalic-webfont.svg = docs\assets\fonts\OpenSans-BoldItalic-webfont.svg
+		docs\assets\fonts\OpenSans-BoldItalic-webfont.ttf = docs\assets\fonts\OpenSans-BoldItalic-webfont.ttf
+		docs\assets\fonts\OpenSans-BoldItalic-webfont.woff = docs\assets\fonts\OpenSans-BoldItalic-webfont.woff
+		docs\assets\fonts\OpenSans-Italic-webfont.eot = docs\assets\fonts\OpenSans-Italic-webfont.eot
+		docs\assets\fonts\OpenSans-Italic-webfont.svg = docs\assets\fonts\OpenSans-Italic-webfont.svg
+		docs\assets\fonts\OpenSans-Italic-webfont.ttf = docs\assets\fonts\OpenSans-Italic-webfont.ttf
+		docs\assets\fonts\OpenSans-Italic-webfont.woff = docs\assets\fonts\OpenSans-Italic-webfont.woff
+		docs\assets\fonts\OpenSans-Light-webfont.eot = docs\assets\fonts\OpenSans-Light-webfont.eot
+		docs\assets\fonts\OpenSans-Light-webfont.svg = docs\assets\fonts\OpenSans-Light-webfont.svg
+		docs\assets\fonts\OpenSans-Light-webfont.ttf = docs\assets\fonts\OpenSans-Light-webfont.ttf
+		docs\assets\fonts\OpenSans-Light-webfont.woff = docs\assets\fonts\OpenSans-Light-webfont.woff
+		docs\assets\fonts\OpenSans-LightItalic-webfont.eot = docs\assets\fonts\OpenSans-LightItalic-webfont.eot
+		docs\assets\fonts\OpenSans-LightItalic-webfont.svg = docs\assets\fonts\OpenSans-LightItalic-webfont.svg
+		docs\assets\fonts\OpenSans-LightItalic-webfont.ttf = docs\assets\fonts\OpenSans-LightItalic-webfont.ttf
+		docs\assets\fonts\OpenSans-LightItalic-webfont.woff = docs\assets\fonts\OpenSans-LightItalic-webfont.woff
+		docs\assets\fonts\OpenSans-Regular-webfont.eot = docs\assets\fonts\OpenSans-Regular-webfont.eot
+		docs\assets\fonts\OpenSans-Regular-webfont.svg = docs\assets\fonts\OpenSans-Regular-webfont.svg
+		docs\assets\fonts\OpenSans-Regular-webfont.ttf = docs\assets\fonts\OpenSans-Regular-webfont.ttf
+		docs\assets\fonts\OpenSans-Regular-webfont.woff = docs\assets\fonts\OpenSans-Regular-webfont.woff
+		docs\assets\fonts\OpenSans-Semibold-webfont.eot = docs\assets\fonts\OpenSans-Semibold-webfont.eot
+		docs\assets\fonts\OpenSans-Semibold-webfont.svg = docs\assets\fonts\OpenSans-Semibold-webfont.svg
+		docs\assets\fonts\OpenSans-Semibold-webfont.ttf = docs\assets\fonts\OpenSans-Semibold-webfont.ttf
+		docs\assets\fonts\OpenSans-Semibold-webfont.woff = docs\assets\fonts\OpenSans-Semibold-webfont.woff
+		docs\assets\fonts\OpenSans-SemiboldItalic-webfont.eot = docs\assets\fonts\OpenSans-SemiboldItalic-webfont.eot
+		docs\assets\fonts\OpenSans-SemiboldItalic-webfont.svg = docs\assets\fonts\OpenSans-SemiboldItalic-webfont.svg
+		docs\assets\fonts\OpenSans-SemiboldItalic-webfont.ttf = docs\assets\fonts\OpenSans-SemiboldItalic-webfont.ttf
+		docs\assets\fonts\OpenSans-SemiboldItalic-webfont.woff = docs\assets\fonts\OpenSans-SemiboldItalic-webfont.woff
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{57786B1F-02C0-4333-8307-CD8C58C8976F}"
+	ProjectSection(SolutionItems) = preProject
+		docs\assets\images\bullet.png = docs\assets\images\bullet.png
+		docs\assets\images\hr.gif = docs\assets\images\hr.gif
+		docs\assets\images\nav-bg.gif = docs\assets\images\nav-bg.gif
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "js", "js", "{37318BFD-0AC6-41C9-BD77-64DA565BFCDE}"
+	ProjectSection(SolutionItems) = preProject
+		docs\assets\js\respond.js = docs\assets\js\respond.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_sass", "_sass", "{2EB3E062-059B-473C-B15B-5D9A72B6485A}"
+	ProjectSection(SolutionItems) = preProject
+		docs\_sass\fonts.scss = docs\_sass\fonts.scss
+		docs\_sass\jekyll-theme-midnight.scss = docs\_sass\jekyll-theme-midnight.scss
+		docs\_sass\normalize.scss = docs\_sass\normalize.scss
+		docs\_sass\rouge-base16-dark.scss = docs\_sass\rouge-base16-dark.scss
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +103,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8334804A-AD45-436B-B210-2DFC18C02FA6} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
+		{6C442953-D674-4A29-85BD-61F725FEE433} = {8334804A-AD45-436B-B210-2DFC18C02FA6}
+		{3D517B36-F851-4170-B992-98D242251927} = {8334804A-AD45-436B-B210-2DFC18C02FA6}
+		{57786B1F-02C0-4333-8307-CD8C58C8976F} = {8334804A-AD45-436B-B210-2DFC18C02FA6}
+		{37318BFD-0AC6-41C9-BD77-64DA565BFCDE} = {8334804A-AD45-436B-B210-2DFC18C02FA6}
+		{2EB3E062-059B-473C-B15B-5D9A72B6485A} = {3C891BAE-D81D-4B35-A8BB-6B67B482DA49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99F8C114-3730-4601-962A-8C7A99D87D9F}
