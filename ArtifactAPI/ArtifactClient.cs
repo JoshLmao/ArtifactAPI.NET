@@ -184,8 +184,14 @@ namespace ArtifactAPI
         {
             if (deck == null)
                 return null;
-
             return DeckEncoder.Encode(deck);
+        }
+
+        public async Task<string> EncodeDeckAsync(DecodedDeck deck)
+        {
+            if (deck == null)
+                return null;
+            return await DeckEncoder.EncodeAsync(deck);
         }
 
         /// <summary>
@@ -197,9 +203,21 @@ namespace ArtifactAPI
         {
             if (deck == null)
                 return null;
+            DecodedDeck decodedDeck = new DecodedDeck(deck);
+            return DeckEncoder.Encode(decodedDeck);
+        }
 
-            DecodedDeck decoded = new DecodedDeck(deck);
-            return DeckEncoder.Encode(decoded);
+        /// <summary>
+        /// Encodes a built deck into a string for sharing
+        /// </summary>
+        /// <param name="deck">The populated deck</param>
+        /// <returns></returns>
+        public async Task<string> EncodeDeckAsync(Deck deck)
+        {
+            if (deck == null)
+                return null;
+            DecodedDeck decodedDeck = new DecodedDeck(deck);
+            return await DeckEncoder.EncodeAsync(decodedDeck);
         }
 
         /// <summary>
@@ -211,8 +229,19 @@ namespace ArtifactAPI
         {
             if (string.IsNullOrEmpty(encodedDeckString))
                 return null;
-
             return DeckDecoder.Decode(encodedDeckString);
+        }
+
+        /// <summary>
+        /// Decodes a deck from it's encoded string. Can display deck at https://playartifact.com/d/{url}
+        /// </summary>
+        /// <param name="encodedDeckString">The base64 encoded string of the deck</param>
+        /// <returns></returns>
+        public async Task<DecodedDeck> DecodeDeckAsync(string encodedDeckString)
+        {
+            if (string.IsNullOrEmpty(encodedDeckString))
+                return null;
+            return await DeckDecoder.DecodeAsync(encodedDeckString);
         }
 
         /// <summary>

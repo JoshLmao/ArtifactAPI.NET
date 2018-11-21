@@ -2,25 +2,47 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtifactAPI.Encoding
 {
+    /// <summary>
+    /// C# version of Valve's DeckEncoder script wrote in PHP (https://github.com/ValveSoftware/ArtifactDeckCode/blob/master/PHP/deck_encoder.php)
+    /// </summary>
     public class DeckEncoder
     {
         public static readonly int CurrentVersion = 2;
+        /// <summary>
+        /// The prefix to every deck code before the actual data
+        /// </summary>
         private static readonly string EncodePrefix = "ADC";
         private static readonly int HeaderSize = 3;
 
+        /// <summary>
+        /// Encodes a deck into a UTF-8 64bit encoded string
+        /// </summary>
+        /// <param name="deck">The </param>
+        /// <returns></returns>
         public static string Encode(DecodedDeck deck)
+        {
+            return Task.Run(() => EncodeAsync(deck)).Result;
+        }
+
+        /// <summary>
+        /// Encodes a deck into a UTF-8 64bit encoded string
+        /// </summary>
+        /// <param name="deck"></param>
+        /// <returns></returns>
+        public static async Task<string> EncodeAsync(DecodedDeck deck)
         {
             if (deck == null)
                 return null;
 
-            byte[] bytes = EncodeToBytes(deck);
+            byte[] bytes = await Task.Run(() => EncodeToBytes(deck));
             if (bytes == null)
                 return null;
 
-            string deckCode = EncodeBytesToString(bytes);
+            string deckCode = await Task.Run(() => EncodeBytesToString(bytes));
             return deckCode;
         }
 
@@ -47,7 +69,8 @@ namespace ArtifactAPI.Encoding
             byte nDummyChecksum = 0;
             int nChecksumByte = bytes.Length;
 
-            if (!AddByte(ref bytes, nDummyChecksum))
+            bool addByteResult = AddByte(ref bytes, nDummyChecksum);
+            if (!addByteResult)
                 return null;
 
             // write the name size
@@ -70,11 +93,13 @@ namespace ArtifactAPI.Encoding
                 nameLen = name.Length;
             }
 
-            if (!AddByte(ref bytes, (byte)nameLen))
+            addByteResult = AddByte(ref bytes, (byte)nameLen);
+            if (!addByteResult)
                 return null;
 
             int keepCount = countHeroes;
-            if (!AddRemainingNumberToBuffer(ref countHeroes, 3, ref bytes))
+            bool bufferResult = AddRemainingNumberToBuffer(ref countHeroes, 3, ref bytes);
+            if (!bufferResult)
                 return null;
 
             int unChecksum = 0;
@@ -92,7 +117,8 @@ namespace ArtifactAPI.Encoding
                 if (casted.Turn == 0)
                     continue;
 
-                if (!AddCardToBuffer(casted.Turn, card.Id - prevCardId, ref bytes, unChecksum))
+                bufferResult = AddCardToBuffer(casted.Turn, card.Id - prevCardId, ref bytes, unChecksum);
+                if (!bufferResult)
                     continue;
 
                 prevCardId = casted.Id;
@@ -119,7 +145,8 @@ namespace ArtifactAPI.Encoding
                     continue;
 
                 //record this set of cards, and advance
-                if (!AddCardToBuffer(castedCard.Count, castedCard.Id - prevCardId, ref bytes, unChecksum))
+                bufferResult = AddCardToBuffer(castedCard.Count, castedCard.Id - prevCardId, ref bytes, unChecksum);
+                if (!bufferResult)
                     continue;
 
                 prevCardId = castedCard.Id;
@@ -134,7 +161,8 @@ namespace ArtifactAPI.Encoding
                 byte[] nameBytes = System.Text.Encoding.UTF8.GetBytes(name);
                 foreach (byte nameByte in nameBytes)
                 {
-                    if (!AddByte(ref bytes, nameByte))
+                    addByteResult = AddByte(ref bytes, nameByte);
+                    if (!addByteResult)
                         return null;
                 }
             }
@@ -142,6 +170,7 @@ namespace ArtifactAPI.Encoding
             int unFullChecksum = ComputeChecksum(ref bytes, preStringByteCount - HeaderSize);
             int unSmallChecksum = (unFullChecksum & 0x0FF);
             bytes[nChecksumByte] = (byte)unSmallChecksum;
+
             return bytes;
         }
 
@@ -243,15 +272,12 @@ namespace ArtifactAPI.Encoding
             if (byteCount == 0)
                 return null;
 
-            //byte[] packed = pack("C*", bytes);
             string encoded = System.Convert.ToBase64String(bytes);
             string deck_string = EncodePrefix + encoded;
 
             deck_string = deck_string.Replace('/', '-');
             deck_string = deck_string.Replace('=', '_');
-            string fixedString = deck_string;
-
-            return fixedString;
+            return deck_string;
         }
     }
 

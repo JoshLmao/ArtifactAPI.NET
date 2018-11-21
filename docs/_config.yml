@@ -1,7 +1,8 @@
 title: ArtifactAPI.NET
 description: ArtifactAPI.NET is a .NET API for accessing the Artifact API
 show_downloads: true
-google_analytics:
+google_analytics: UA-127734786-3
 theme: jekyll-theme-midnight
 imagesurl: assets/images
 baseurl: /
+releasesurl: https://github.com/JoshLmao/ArtifactAPI.NET/releases

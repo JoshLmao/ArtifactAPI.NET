@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtifactAPI.Encoding
 {
@@ -11,6 +12,9 @@ namespace ArtifactAPI.Encoding
     public class DeckDecoder
     {
         const int CURRENT_VERSION = 2;
+        /// <summary>
+        /// The prefix to every deck code before data
+        /// </summary>
         const string DECK_PREFIX = "ADC";
 
         /// <summary>
@@ -25,6 +29,16 @@ namespace ArtifactAPI.Encoding
                 return null;
 
             DecodedDeck deck = ParseDeck(deckCode, deckBytes);
+            return deck;
+        }
+
+        public static async Task<DecodedDeck> DecodeAsync(string deckCode)
+        {
+            byte[] deckBytes = await Task.Run(() => DeckDecodeString(deckCode));
+            if (deckBytes == null)
+                return null;
+
+            DecodedDeck deck = await Task.Run(() => ParseDeck(deckCode, deckBytes));
             return deck;
         }
 

@@ -11,6 +11,7 @@ Check out the relevant pages below
 *   [Quick Start]({{ '/pages/quick_start' | relative_url }})
 *   [F.A.Q]({{ '/pages/faq' | relative_url }})
 *   [Examples]({{ '/pages/examples' | relative_url }})
+*   [Releases]({{ site.releasesurl }})
 
 ### Classes
 
@@ -22,7 +23,7 @@ This API's purpose is to provide access to Valve's Artifact API and allows you t
 
 # Installation
 
-*   Releases from the [Release](https://github.com/JoshLmao/ArtifactAPI.NET) page
+*   Releases from the [Release]({{ site.releasesurl }}) page
 *   NuGet Package release **(Not available yet!)**
 
 # Features Projects

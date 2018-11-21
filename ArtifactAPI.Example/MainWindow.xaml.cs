@@ -63,7 +63,7 @@ namespace ArtifactAPI.Example
         private async Task Update(string deckCode)
         {
             //Decode the string into a deck. See if it's valid
-            DecodedDeck decodedDeck = m_client.DecodeDeck(deckCode);
+            DecodedDeck decodedDeck = await m_client.DecodeDeckAsync(deckCode);
             if (decodedDeck == null)
             {
                 Console.WriteLine("Unable to get deck. DeckCode is invald");
@@ -84,7 +84,7 @@ namespace ArtifactAPI.Example
             if (img_HeroFive.Source != null)
                 img_HeroFive.Source = null;
 
-            SetFocusedCard(-1, ArtType.Ingame, Enums.Language.English);
+            await SetFocusedCard(-1, ArtType.Ingame, Enums.Language.English);
             t_totalCards.Text = null;
             t_totalItems.Text = null;
             t_TCSpell.Text = null;
