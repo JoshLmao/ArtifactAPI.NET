@@ -6,8 +6,8 @@
   <br/>
   <br/>
 
-  <a href="https://twitter.com/_JShepherd">
-    <img src="https://img.shields.io/badge/twitter-__JShepherd-blue.svg?style=flat-square.svg"/>
+  <a href="https://twitter.com/JoshLmao">
+    <img src="https://img.shields.io/badge/twitter-JoshLmao-blue.svg?style=flat-square.svg"/>
   </a>
   <a href="https://joshlmao.github.io/ArtifactAPI.NET">
     <img src="https://img.shields.io/badge/documentation-available-brightgreen.svg?style=flat-square.svg"/>
@@ -19,7 +19,7 @@
 
 A .NET API wrapper for interfacing with Valve's API for Artifact. Currently work in progress.
 
-For further information about how the repo works, check out [some of Valve's current information](https://github.com/ValveSoftware/ArtifactDeckCode/blob/master/README.md) on encoding/decoding decks & their API
+Check out the full documentation at [joshlmao.github.io/ArtifactAPI.NET](joshlmao.github.io/ArtifactAPI.NET). For further information about how the repo works, check out [some of Valve's current information](https://github.com/ValveSoftware/ArtifactDeckCode/blob/master/README.md) on encoding/decoding decks & their API
 
 ## Example Solution
 
