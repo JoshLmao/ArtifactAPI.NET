@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <!--Title of package-->
+    <id>ArtifactAPI</id>
+    <!--Current version-->
+    <version>0.1.2</version>
+    <authors>JoshLmao</authors>
+    <owners>JoshLmao</owners>
+    <iconurl>https://github.com/JoshLmao/ArtifactAPI.NET/blob/master/icon128.png</iconurl>
+    <!--Link to license file in repo-->
+    <licenseUrl>https://github.com/JoshLmao/ArtifactAPI.NET/blob/master/LICENSE</licenseUrl>
+    <!--Main project Url-->
+    <projectUrl>https://joshlmao.github.io/ArtifactAPI.NET/</projectUrl>
+    <!--Link to the Github repo-->
+    <repository type="git" url="https://github.com/JoshLmao/ArtifactAPI.NET" />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!--One line summary of API-->
+    <summary>A C# .NET API for interfacing with Valve's API for Artifact</summary>
+    <!--Full description of API-->
+    <description>
+      A C# .NET API for interfacing with Valve's API for Artifact
+
+      Check out the Github repo for documentation and more information: https://github.com/JoshLmao/ArtifactAPI.NET
+    </description>
+    <!--Tags and keywords for finding API in search-->
+    <tags>artifact api artifactapi .net artifact-valve valve c#</tags>
+    <!--Current dependencies-->
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="11.0.2" />
+      <dependency id="RestSharp" version="106.5.4" />
+    </dependencies>
+  </metadata>
+</package>

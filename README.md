@@ -15,6 +15,9 @@
   <a href="https://github.com/JoshLmao/ArtifactAPI.NET/releases">
     <img src="https://img.shields.io/badge/release-v0.1.01-brightgreen.svg?style=flat-square.svg"/>
   </a>
+   <a href=" https://www.nuget.org/packages/ArtifactAPI/">
+    <img src="https://img.shields.io/badge/nuget-v0.1.2-brightgreen.svg?style=flat-square.svg"/>
+  </a>
 </p>
 
 A .NET API wrapper for interfacing with Valve's API for Artifact. Currently work in progress.

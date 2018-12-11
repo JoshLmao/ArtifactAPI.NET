@@ -6,3 +6,4 @@ theme: jekyll-theme-midnight
 imagesurl: assets/images
 baseurl: /
 releasesurl: https://github.com/JoshLmao/ArtifactAPI.NET/releases
+nugeturl: https://www.nuget.org/packages/ArtifactAPI/

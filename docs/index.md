@@ -24,7 +24,7 @@ This API's purpose is to provide access to Valve's Artifact API and allows you t
 # Installation
 
 *   Releases from the [Release]({{ site.releasesurl }}) page
-*   NuGet Package release **(Not available yet!)**
+*   NuGet Package release: [nuget.org/ArtifactAPI]({{ site.nugeturl }})
 
 # Features Projects
 
