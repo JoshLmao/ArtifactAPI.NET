@@ -7,7 +7,7 @@
     <version>0.1.2</version>
     <authors>JoshLmao</authors>
     <owners>JoshLmao</owners>
-    <iconurl>https://github.com/JoshLmao/ArtifactAPI.NET/blob/master/icon128.png</iconurl>
+    <iconUrl>https://github.com/JoshLmao/ArtifactAPI.NET/blob/master/icon128.png</iconUrl>
     <!--Link to license file in repo-->
     <licenseUrl>https://github.com/JoshLmao/ArtifactAPI.NET/blob/master/LICENSE</licenseUrl>
     <!--Main project Url-->
