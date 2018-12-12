@@ -4,7 +4,7 @@
     <!--Title of package-->
     <id>ArtifactAPI</id>
     <!--Current version-->
-    <version>0.1.2</version>
+    <version>0.1.3</version>
     <authors>JoshLmao</authors>
     <owners>JoshLmao</owners>
     <iconUrl>https://github.com/JoshLmao/ArtifactAPI.NET/blob/master/logo64.png</iconUrl>
@@ -31,4 +31,10 @@
       <dependency id="RestSharp" version="106.5.4" />
     </dependencies>
   </metadata>
+
+    <!--Files to include-->
+    <files>
+      <file src="bin/Release/ArtifactAPI.dll" target="lib/net46/ArtifactAPI.dll"/>
+      <file src="bin/Release/ArtifactAPI.xml" target="lib/net46/ArtifactAPI.xml"/>
+    </files>
 </package>

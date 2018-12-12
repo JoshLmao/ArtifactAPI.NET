@@ -408,6 +408,9 @@ namespace ArtifactAPI
         /// <returns>The url of the image</returns>
         public async Task<string> GetCardArtUrlAsync(string cardName, ArtType artType, Language language = Language.English)
         {
+            if (m_loadedCards == null)
+                await GetAllCardsAsync();
+
             Card c = m_loadedCards.FirstOrDefault(x => x.Names.English == cardName);
             if (c == null)
                 return null;
