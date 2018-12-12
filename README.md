@@ -15,7 +15,7 @@
   <a href="https://github.com/JoshLmao/ArtifactAPI.NET/releases">
     <img src="https://img.shields.io/badge/release-v0.1.01-brightgreen.svg?style=flat-square.svg"/>
   </a>
-   <a href=" https://www.nuget.org/packages/ArtifactAPI/">
+   <a href="https://www.nuget.org/packages/ArtifactAPI/">
     <img src="https://img.shields.io/badge/nuget-v0.1.2-brightgreen.svg?style=flat-square.svg"/>
   </a>
 </p>
